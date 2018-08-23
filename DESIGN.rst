@@ -70,6 +70,7 @@ operations. Operations O() are shown as average/worst or
 average?optimal where optimal might be common for things like
 short moves or dlist cursors being close.
 
+========== =================== =========== ========== ===========
 Operation  Steps               binheap     cdlist     deque
 ========== =================== =========== ========== ===========
 cachehit    c.movedn(mid)      O(1)/O(lnN) O(N)?O(1)  O(N)?O(1)
@@ -158,6 +159,7 @@ e - an entry list [v,k,...]
 k - a key in the pqueue
 v - the priority of a key.
 
+==================== =========================================
 Operation            Descrition
 ==================== =========================================
 q.init({k:v,...})    Init with sorted k,v data.
@@ -180,7 +182,8 @@ It is possible to directly access and manipulate the underlying
 q.pqueue to eg iterate through and update all priorities, but you must
 ensure the correct pqueue order is maintained.
 
-Operation                     Descrition
+============================= =========================================
+Operation                     Description
 ============================= =========================================
 q.init({k:v,...})
 q.peek() -> k
@@ -210,11 +213,13 @@ When C reaches 2.0 it and all entries are decayed, ammortizing the
 decay to O(1) per lookup. At any time the decayed count for any entry
 can be calculated as count/C.
 
+============================= =========================================
+Operation                     Description
+============================= =========================================
 c.init(size, T)
 d = c[k]
 c[k] = d
 del c[k]
-
 c.size
 c.C
 C.T
@@ -223,6 +228,7 @@ C.set_count
 C.del_count
 C.hit_count
 C.mhit_count
+============================= =========================================
 
 Thoughts on DLists
 ------------------

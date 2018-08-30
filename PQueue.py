@@ -3,180 +3,227 @@ import heapq
 import bisect
 
 
-class PQueueBase(collections.Sized, collections.Iterable, collections.Container):
-  """Priority Queue base class.
+class PQueueVect(collections.MutableMapping):
+  """A PQueue implemented using Pythons list."""
 
-  This is a base class for a priority queue. It assumes all entries
-  are [value, key, ...] lists, where the end values are implementation
-  specific. The newentry() method can be used to create new entries.
-
-  Additional methods sort(), move(), peek(), push(), pull(), and swap()
-  will get the sequence into and maintain the correct priority
-  order.
-  """
+  __marker = object()
 
   def __init__(self, *args, **kwargs):
-    for k, v in dict(*args, **kwargs):
-      self.push(self.newentry(k, v)
+    self.data = dict(*args, **kwargs)
+    self.queue = self._queue(self.data)
+    self.data.update((e[1], e) for e in self.queue)
 
-  def __contains__(self, value):
-    for v in self:
-      if v == value:
-        return True
-    return False
+  def __getitem__(self, key):
+    return self.data[key][0]
 
-  def newentry(self, k, v):
-    raise NotImplementedError
+  def __setitem__(self, key, value):
+    d = self.data
+    if d.has_key(key):
+      entry, _, _ = self._swap(key, value, d[key])
+    else:
+      entry = self._push(key, value)
+    d[key] = entry
 
-  def sort(self):
-    raise NotImplementedError
+  def __delitem__(self, key):
+    self._pull(self.data.pop(key))
 
-  def move(self, entry):
-    raise NotImplementedError
-
-  def peek(self):
-    raise NotImplementedError
-
-  def push(self, entry):
-    raise NotImplementedError
-
-  def pull(self, entry=None):
-    raise NotImplementedError
-
-  def swap(self, entry, oldentry=None):
-    if oldentry is None:
-      oldentry = self.peek()
-    self.pull(oldentry)
-    self.push(entry)
-    return oldentry
-
-
-class PQueueList(collections.MutableSequence, PQueueBase):
-  """Priority Queue implemented as a sorted list.
-
-  This is a MutableSequence with additional methods for using it as a
-  priority queue. It assumes all entries are [value, key, index]
-  lists, where the index is the index of the entry in the sequence.
-  This makes the index() operation O(1).
-
-  All the normal list methods operate unchanged except they will
-  ensure that the entries index values are updated to reflect their
-  position in the list. They do NOT enforce any sort of ordering
-  within the list, and can be used by subclasses to manipulate the
-  list into the desired order while maintaining the correct index
-  entries. There is also a reindex() helper method that can be used to
-  set the indexes for a range of entries that can be used by
-  subclasses after manipulating self.data directly.
-  """
-
-  def __init__(self, *args, **kwargs):
-    self.data = [[v, k, i] for (i, (k, v)) in enumerate(
-        dict(*args, **kwargs).iteritems())]
-    self.sort()
-
-  def __getitem__(self, index):
-    return self.data[index]
-
-  def __setitem__(self, index, value):
-    self.data[index] = value
-    value[2] = index
-
-  def __delitem__(self, index):
-    del self.data[index]
-    self.reindex(index)
+  def __iter__(self):
+    return iter(self.data)
 
   def __len__(self):
     return len(self.data)
 
-  def insert(self, index, value):
-    self.data.insert(index, value)
-    self.reindex(index)
+  def clear(self):
+    self.data.clear()
+    self.queue = self._queue()
 
-  def index(self, value):
-    return value[2]
+  def peekitem(self):
+    """peekitem() -> key, value."""
+    return self._peek()
 
-  def reindex(self, i=0, j=None):
-    if j is None:
-      j = len(self.data)
-    for i in xrange(i, j):
-      self.data[i][2] = i
-
-  def newentry(self, k, v):
-    return [v, k, -1]
-
-  def sort(self):
-    sort(self.data)
-    self.reindex()
-
-  def move(self, entry):
-    index = entry[2]
-    if index and entry[0] < self.data[index-1][0]:
-        newindex = bisect.bisect_left(self.data, entry, hi=index)
+  def popitem(self, key=__marker):
+    """popitem([key]) -> key, value."""
+    d = self.data
+    if key is self.__marker:
+      try:
+        key, value = self._pull()
+      except IndexError:
+        raise KeyError
+      del d[key]
+      return key, value
     else:
-        newindex = bisect.bisect_left(self.data, entry, lo=index)
-    if index < newindex:
-      self.data.insert(index, entry)
-      del self.data[index]
-      self.reindex(index, newindex)
-    elif newindex < index:
-      del self.data[index]
-      self.data.insert(newindex, entry)
-      self.reindex(newindex, index+1)
+      return self._pull(d,pop(key))
 
-  def peek(self):
-    return self.data[0]
+  def swapitem(self, key, value, oldkey=__marker):
+    """swapitem(key, value, [oldkey]) -> oldkey, oldvalue."""
+    d = self.data
+    if oldkey is self.__marker:
+      entry, oldkey, oldvalue = self._swap(key, value)
+    else:
+      entry, oldkey, oldvalue = self._swap(key, value, d[oldkey])
+    del d[oldkey]
+    d[key] = entry
+    return oldkey, oldvalue
 
-  def push(self, entry):
-    bisect.insort_left(self, entry)
+  def scale(self, mult):
+    """scale(mult)."""
+    for e in self.queue:
+      e[0] *= mult
 
-  def pull(self, entry=None):
-    if entry is None:
-      return self.pop(0)
-    return self.pop(entry[2])
+  def _queue(self, *args, **kwargs):
+    """_queue(*args, **kwargs) -> queue."""
+    return sorted([v, k] for k,v in dict(*args, **kwargs).iteritems())
 
-  def swap(self, entry, oldentry=None):
-    if oldentry is None:
-      oldentry = self.data[0]
-    index = oldentry[2]
-    self[index] = entry
-    self.move(entry)
-    return oldentry
+  def _peek(self, entry=None):
+    """_peek([entry]) -> key, value."""
+    value, key = entry or self.queue[0]
+    return key, value
 
+  def _push(self, key, value):
+    """_push(key, value) -> entry."""
+    entry = [value, key]
+    bisect.insort(self.queue, entry)
+    return entry
 
-class PQueueHeap(PQueueList):
+  def _pull(self, entry=None):
+    """_pull([entry]) -> key, value."""
+    q = self.queue
+    if entry:
+      del q[bisect.bisect(q, entry) - 1]
+    else:
+      entry = q.pop(0)
+    return entry[1], entry[0]
 
-  def sort(self):
-    heapq.heapify(self)
-
-  def move(self, entry):
-    index = entry[2]
-    # if it is not the top, try and move it up.
-    if index > 0:
-      heapq._siftdown(self, 0, index)
-    # If it didn't move up, try to move it down.
-    if self.data[index] is entry:
-      heapq._siftup(self, index)
-
-  def push(self, entry):
-    heapq.heappush(self, entry)
-
-  def pull(self, entry=None):
-    if entry is None:
-      return heapq.heappop(self)
-    lastentry = self.data.pop()
-    if self.data:
-      return self.swap(lastentry, entry)
-    return lastentry
+  def _swap(self, key, value, oldentry=None):
+    """_swap(key, value, [oldentry]) -> entry, oldkey, oldvalue."""
+    oldkey, oldvalue = self._pull(oldentry)
+    entry = self._push(key, value)
+    return entry, oldkey, oldvalue
 
 
-class PQueueDList(PQueueBase):
+class PQueueDeque(PQueueVect):
+  """A PQueue implemented using Pythons deque."""
+
+  def _queue(self, *args, **kwargs):
+    return collections.deque(
+        sorted([v, k] for k,v in dict(*args, **kwargs).iteritems()))
+
+  def _insert(self, i, e):
+    q = self.queue
+    q.rotate(-i)
+    q.appendleft(e)
+    q.rotate(i)
+
+  def _push(self, key, value):
+    """push(key, value) -> entry."""
+    entry = [value, key]
+    self._insert(bisect.bisect(self.queue, entry), entry)
+    return entry
+
+  def _pull(self, entry=None):
+    """_pull([entry]) -> key, value."""
+    q = self.queue
+    if entry:
+      del q[bisect.bisect(q, entry) - 1]
+    else:
+      entry = q.popleft()
+    return entry[1], entry[0]
+
+
+class PQueueHeapq(PQueueVect):
+  """A PQueue implemented using Pythons heapq."""
+
+  __deleted = object()
+
+  def _peek(self, entry=None):
+    """_peek([entry]) -> key, value."""
+    q = self.queue
+    value, key = entry or q[0]
+    while key is self.__deleted:
+      heapq.heappop(q)
+      value, key = q[0]
+    return key, value
+
+  def _push(self, key, value):
+    """_push(key, value) -> entry."""
+    entry = [value, key]
+    heapq.heappush(self.queue, entry)
+    return entry
+
+  def _pull(self, entry=None):
+    """_pull([entry]) -> key, value."""
+    if entry:
+      value, key = entry
+      entry[1] = self.__deleted
+    else:
+      # Suck out any deleted items.
+      self._peek()
+      value, key = heapq.heappop(self.queue)
+    return key, value
+
+  def _swap(self, key, value, oldentry=None):
+    """_swap(key, value, [oldentry]) -> entry, oldkey, oldvalue."""
+    if oldentry:
+      oldkey, oldvalue = self._pull(oldentry)
+      entry = self._push(key, value)
+    else:
+      entry = [value, key]
+      # Suck out any deleted items.
+      self._peek()
+      oldvalue, oldkey = heapq.heapreplace(self.queue, entry)
+    return entry, oldkey, oldvalue
+
+
+class PQueueDList(PQueueVect):
+  """A PQueue implemented using a DList."""
+
+  def _queue(self, *args, **kwargs):
+    """_queue(*args, **kwargs) -> queue."""
+    return CDList(*args, **kwargs)
+
+  def _peek(self, entry=None):
+    """_peek([entry]) -> key, value."""
+    return self.queue.peek(entry)
+
+  def _push(self, key, value):
+    """_push(key, value) -> entry."""
+    return self.queue.push(key, value)
+
+  def _pull(self, entry=None):
+    """_pull([entry]) -> key, value."""
+    return self.queue.pull(entry)
+
+
+class PQueueLRU(PQueueDList):
+  """LRU with PQueue compatible interface.
+
+  It doesn't really care about priorities except on initialization.
+  Setting entries or doing swapitem() will add/move them to the end of
+  the queue.
+  """
+
+  def _push(self, key, value):
+    entry = self.queue.newentry(key, value)
+    self.queue.insert(entry)
+    return entry
+
+
+class CDList(collections.Container, collections.Iterable, collections.Sized):
+  """A doubly linked list with cursor for sorted inserts."""
 
   def __init__(self, *args, **kwargs):
     self.count = 0
-    self.cursor = None
     self.next = None
     self.last = None
-    super(PQueueDList, self).__init__(*args, **kwargs)
+    self.cursor = None
+    for e in sorted(self.newentry(k,v) for k,v in dict(*args, **kwargs).iteritems()):
+      self.insert(e)
+
+  def __contains__(self, value):
+    for entry in self:
+      if entry == value:
+        return True
+    return False
 
   def __len__(self):
     return self.count
@@ -186,6 +233,15 @@ class PQueueDList(PQueueBase):
     while next:
       yield next
       next = next[2]
+
+  def __reversed__(self):
+    prev = self.last
+    while prev:
+      yield prev
+      prev = prev[3]
+
+  def newentry(self, k, v):
+    return [v, k, None, None]
 
   def insert(self, entry, pos=None):
     """Insert entry into dlist before pos."""
@@ -224,31 +280,19 @@ class PQueueDList(PQueueBase):
     if next:
       next[3] = prev
     else:
-      self.last is prev
+      self.last = prev
     # Update the entry and count.
     entry[2] = entry[3] = None
     self.count -= 1
 
-  def newentry(self, k, v):
-    return [v, k, None, None]
-
-  def sort(self):
-    # This is insert sort, which is O(N^2) average but approaches O(N)
-    # for already sorted data.
-    pos = self.next
-    while pos:
-      entry = pos[2]
-      if entry:
-        self.move(entry)
-      pos = pos[2]
-
-  def move(self, entry):
-    pos = entry[3]
-    self.remove(entry)
+  def insort(self, entry, pos=None):
+    """Insert entry into sorted dlist, with optional pos hint."""
+    # Scan from the end if pos not specified.
+    pos = pos or self.last
     # Scan backwards from pos for a smaller or equal entry.
     while pos and pos[0] > entry[0]:
       pos = pos[3]
-    # Adjust pointer back to insertion point.
+    # Adjust pointer to insertion point after smaller or equal entry.
     if pos:
       pos = pos[2]
     else:
@@ -258,135 +302,19 @@ class PQueueDList(PQueueBase):
       pos = pos[2]
     self.insert(entry, pos)
 
-  def peek(self):
-    return self.next
+  def peek(self, entry=None):
+    entry = entry or self.next
+    return entry[1], entry[0]
 
-  def push(self, entry):
-    self.insert(entry, self.cursor)
-    self.move(entry)
+  def push(self, key, value):
+    entry = self.newentry(key, value)
+    self.insort(entry, self.cursor)
     self.cursor = entry
-
-  def pull(self, entry=None):
-    if entry is None:
-      entry = self.next
-    self.remove(entry)
     return entry
 
-
-class PQueueFIFO(PQueueBase):
-  """FIFO with PQueue compatible interface.
-  
-  It doesn't really care about priorities except on initialization.
-  Doing push()/pull() behaves like a normal FIFO. Doing move() will
-  move the entry to the end of the queue. Doing swap() will append the
-  entry to the end of the queue and remove the oldentry.
-  
-  Operations only affecting the ends of the queue are O(1). Doing
-  pull(), move() or swap() on elements in the middle of the queue are
-  O(N), and cost about the same as insert() or del on the the front of
-  a list.
-  """
-  def __init__(self, *args, **kwargs):
-    self.data = deque(sorted([v,k] for (k,v) in dict(*args, **kwargs).items()))
-  
-  def insert(self, i, e):
-    self.data.rotate(-i)
-    self.data.appendleft(e)
-    self.data.rotate(i)
-
-  def newentry(self, k, v):
-    return [v, k]
-
-  def sort(self):
-    pass
-
-  def move(self, entry):
-    self.data.remove(entry)
-    self.data.append(entry)
-
-  def peek(self):
-    return self.data[0]
-
-  def push(self, entry):
-    self.data.append(entry)
-
   def pull(self, entry=None):
-    if entry:
-      self.data.remove(entry)
-      return entry
-    return self.data.popleft()
-
-                
-class DictPQueue(collections.MutableMapping):
-
-  __marker = object()
-
-  PQueueClass = PQueueHeap
-
-  def __init__(self, *args, **kwargs):
-    self.data = dict(*args, **kwargs)
-    self.pqueue = self.PQueueClass(self.data.items())
-    self.data.update((e[1], e) for e in self.heap)
-
-  def __getitem__(self, key):
-    return self.data[key][0]
-
-  def __setitem__(self, key, value):
-    if key in self.data:
-       entry = self.data[key]
-       entry[0] = value
-       self.pqueue.move(entry)
-    else:
-      entry = self.pqueue.newentry(key, value)
-      self.d[key] = entry
-      self.pqueue.push(entry)
-
-  def __delitem__(self, key):
-    entry = self.data.pop(key)
-    self.pqueue.pull(entry)
-
-  def __iter__(self):
-    return iter(self.data)
-
-  def __len__(self):
-    return len(self.data)
-
-  def peek(self):
-    self.pqueue.peek()[1]
-
-  def pull(self):
-    return self.pullitem()[1]
-
-  def peekitem(self, key=__marker):
-    if key is __marker:
-      entry = self.pqueue.peek()
-    else:
-      entry = self.data[key]
+    entry = entry or self.next
+    if not entry:
+      raise IndexError('pull() from empty DList')
+    self.remove(entry)
     return entry[1], entry[0]
-
-  def pushitem(self, key, value):
-    self[key] = value
-
-  def pullitem(self, key=__marker):
-    if key is __marker:
-      entry = self.pqueue.pull()
-    else:
-      entry = self.pqueue.pull(self.data[key])
-    del self.data[entry[1]]
-    return entry[1], entry[0]
-
-  def swapitem(self, key, value, oldkey=__marker):
-    if key in self:
-      del self[key]
-    entry = self.pqueue.newentry(key, value)
-    if oldkey == __marker:
-      oldentry = self.pqueue.swap(entry)
-    else:
-      oldentry = self.pqueue.swap(entry, self.data[oldkey])
-    del self.data[oldkey]
-    self.data[key] = entry
-    return oldentry[1], oldentry[0]
-
-  def scale(self, mult):
-    for e in self.pqueue:
-      e[0] *= mult

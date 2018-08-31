@@ -74,12 +74,11 @@ short moves or dlist cursors being close.
 Operation  Steps               binheap     cdlist     deque
 ========== =================== =========== ========== ===========
 cachehit    c.movedn(mid)      O(1)/O(lnN) O(N)?O(1)  O(N)?O(1)
-metahit     m.movedn(mid)      O(1)/O(lnN) O(1)       O(N)
+metahit     m.movedn(mid)      O(1)/O(lnN) O(N)?O(1)  O(N)?O(1)
+totalmiss   m.swap(max,min)    O(lnN)      O(N)?O(1)  O(1)
 cacheset    m.pull(max)        O(1)        O(1)       O(1)
             c.swap(mid,min)    O(lnN)      O(N)?O(1)  O(N)
             m.push(max)        O(1)        O(1)       O(1)
-totalmiss   c.swap(mid,min)    O(lnN)      O(N)?O(1)  O(N)
-cacheset    m.swap(max,min)    O(lnN)      O(1)       O(1)
 ========== =================== =========== ========== ===========
 
 Note that the operations on the meta pqueue consist of;
@@ -120,8 +119,8 @@ Possible implementations.
 * binheap - a normal binary heap implementation.
 * cdlist - a doubly-linked-list with an insert cursor to speed up
   inserts near the same place.
-* array - a normal array
-* dqueue - A double ended queue implemented either like Pythons
+* vector - a normal array
+* dqueue - A double ended queue implemented either like Python's
   dqueue (linked list of fixed sized buffers), or a circular buffer.
 
 Possible simplifications
@@ -134,41 +133,38 @@ Possible simplifications
 PQueue API
 ----------
 
-This gives an API that can work for a variety of different pqueue
-implementations (heap, array, dlist, etc).
+This is an API that can work for a variety of different pqueue
+implementations (heap, array, dlist, etc), and provides a low level
+sequence-like view of a priority queue.
 
 The init() can take any combination of arguments that work for
-creating dicts. We use pull() instead of pop() for getting the top
-item so that pop() behaves like the normal list or dict operation
-(cheap O(1) operation, different default arguments, and doesn't
-necessarily maintain correct order). The swap() operation is
+creating dicts. We use pull() for extracting the top item to avoid
+confusion with any implementation's pop(). The swap() operation is
 equivalent to a pull() and push() but can be more efficient for some
 implementations.
 
-It is possible to iterate over and modify elements in the pqueue.
-Doing this is cheap and will not update their positions. If element
-changes can affect the correct order, the user must call q.sort() or
-q.move() to re-establish the correct order.
-
-For the operations we use the following values;
+We use `k,v` for items added/taken from the queue, and `e` to refer to
+entries on the queue. The 'e' instance uniquely refers to a particular
+entry added to the queue and will not change until it is removed. It
+is possible (but not advisable) to push multiple items with the same
+key. We use the folling argument shorthand for the API definition;
 
 q - a pqueue instance
 e - an entry list [v,k,...]
-k - a key in the pqueue
-v - the priority of a key.
+k - an item key
+v - an item priority
+k,v- a key,priority item in the pqueue.
 
-==================== =========================================
-Operation            Descrition
-==================== =========================================
-q.init({k:v,...})    Init with sorted k,v data.
-q.newentry(k,v) -> e Create a new entry.
-q.sort()             Sort everything into correct positions.
-q.move(e)            Move e into its correct position.
-q.peek() -> e        Get the top entry.
-q.push(e)            Push entry e in.
-q.pull([e]) -> e     Pull entry e (default: top) out.
-q.swap(e,[e2]) -> e,e2 Swap e in and e2 (default: top) out.
-==================== =========================================
+========================= =========================================
+Operation                 Descrition
+========================= =========================================
+q.init({k:v,...})         Init using dict() style args.
+q.peek([e])->k,v          Get the top or an entry's item.
+q.push(k,v)->e            Push an item in and return the entry.
+q.pull([e])->k,v          Pull the top or an entry's item out.
+q.swap(k,v,[e2])->e,k2,v2 Swap k,v->e in and e2->k2,v2 out.
+iter(q) -> e,...          Iterate through all the entries.
+========================= =========================================
 
 DictPQueue API
 --------------
@@ -183,19 +179,17 @@ ensure the correct pqueue order is maintained.
 ============================= =========================================
 Operation                     Description
 ============================= =========================================
-q.init({k:v,...})
-q.peek() -> k
-q.pull([k]) -> k
-q.peekitem([k]) -> k,v
-q.pullitem([k]) -> k,v
-q.pushitem(k, v)              Equivalent to q[k]=v
-q.swapitem(k,v,[k2]) -> k2,v2 Fast q.pushitem(k,v); q.pullitem(k2)
+q.init({k:v,...})             Initialize using dict() style args.
+q.peekitem([k])->k,v          Get the top or a particular item.
+q.popitem([k])->k,v           Pop the top or a particular item.
+q.pushitem(k, v)              Push or replace an item.
+q.swapitem(k,v,[k2])->k2,v2   Fast q.popitem(k2); q.pushitem(k,v)
 q.scale(m)                    Rescale all priorities v=v*m
-v = q[k]
-q[k] = v
-del q[k]
-q.pop([k]) -> v
-iter(q) -> k,...
+v = q[k]                      Equivalent to _,v = q.peekitem(k)
+q[k] = v                      Equivalent to q.pushitem(k,v)
+del q[k]                      Equivalent to q.popitem(k)
+q.pop([k]) -> v               Equivalent to _,v = q.popitem(k)
+iter(q) -> k,...              Iterate keys in arbitrary order.
 ============================= =========================================
 
 Cache API

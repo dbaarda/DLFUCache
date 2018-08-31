@@ -33,8 +33,8 @@ def chit(i):
   q.C *= T
 def mhit(i):
   q[i] += q.C
-  v = q[i]
-  q.swapitem(n+i, q.C, i)
+  v = q.pop(i)
+  q[n+i] = q.C
   q.C *= T
 def miss(i):
   q.swapitem(n+i, q.C)

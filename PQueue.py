@@ -37,9 +37,12 @@ class PQueueVect(collections.MutableMapping):
     self.data.clear()
     self.queue = self._queue()
 
-  def peekitem(self):
+  def peekitem(self, key=__marker):
     """peekitem() -> key, value."""
-    return self._peek()
+    if key is self.__marker:
+      return self._peek()
+    else:
+      return self.peek(self.data[key])
 
   def popitem(self, key=__marker):
     """popitem([key]) -> key, value."""
@@ -52,7 +55,7 @@ class PQueueVect(collections.MutableMapping):
       del d[key]
       return key, value
     else:
-      return self._pull(d,pop(key))
+      return self._pull(d.pop(key))
 
   def swapitem(self, key, value, oldkey=__marker):
     """swapitem(key, value, [oldkey]) -> oldkey, oldvalue."""

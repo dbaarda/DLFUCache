@@ -1,0 +1,30 @@
+ 4096 PQueueVect   th= 0.037 tm= 0.040 t0= 0.046 tn= 0.022 tc= 0.148 ts= 0.102
+ 4096 PQueueDeque  th= 0.056 tm= 0.030 t0= 0.030 tn= 0.031 tc= 0.181 ts= 0.109
+ 4096 PQueueHeapq  th= 0.018 tm= 0.020 t0= 0.019 tn= 0.011 tc= 0.087 ts= 0.063
+ 4096 PQueueDList  th= 0.033 tm= 0.025 t0= 0.024 tn= 0.021 tc= 1.497 ts= 0.080
+ 4096 PQueueLRU    th= 0.023 tm= 0.018 t0= 0.017 tn= 0.017 tc= 0.086 ts= 0.070
+
+ 8192 PQueueVect   th= 0.051 tm= 0.063 t0= 0.070 tn= 0.024 tc= 0.221 ts= 0.139
+ 8192 PQueueDeque  th= 0.079 tm= 0.031 t0= 0.033 tn= 0.033 tc= 0.252 ts= 0.131
+ 8192 PQueueHeapq  th= 0.018 tm= 0.024 t0= 0.020 tn= 0.012 tc= 0.088 ts= 0.063
+ 8192 PQueueDList  th= 0.034 tm= 0.028 t0= 0.026 tn= 0.021 tc= 5.793 ts= 0.082
+ 8192 PQueueLRU    th= 0.023 tm= 0.020 t0= 0.017 tn= 0.017 tc= 0.086 ts= 0.070
+
+16384 PQueueVect   th= 0.094 tm= 0.114 t0= 0.114 tn= 0.024 tc= 0.351 ts= 0.188
+16384 PQueueDeque  th= 0.128 tm= 0.032 t0= 0.038 tn= 0.036 tc= 0.365 ts= 0.163
+16384 PQueueHeapq  th= 0.018 tm= 0.024 t0= 0.021 tn= 0.011 tc= 0.089 ts= 0.064
+16384 PQueueDList  th= 0.041 tm= 0.031 t0= 0.032 tn= 0.021 tc=14.984 ts= 0.080
+16384 PQueueLRU    th= 0.023 tm= 0.018 t0= 0.017 tn= 0.017 tc= 0.085 ts= 0.070
+
+32768 PQueueVect   th= 0.142 tm= 0.234 t0= 0.234 tn= 0.025 tc= 0.743 ts= 0.225
+32768 PQueueDeque  th= 0.231 tm= 0.038 t0= 0.044 tn= 0.045 tc= 0.622 ts= 0.233
+32768 PQueueHeapq  th= 0.019 tm= 0.028 t0= 0.022 tn= 0.012 tc= 0.095 ts= 0.067
+32768 PQueueDList  th= 0.064 tm= 0.042 t0= 0.041 tn= 0.021 tc=32.557 ts= 0.081
+32768 PQueueLRU    th= 0.023 tm= 0.020 t0= 0.016 tn= 0.016 tc= 0.086 ts= 0.069
+
+65536 PQueueVect   th= 0.252 tm= 0.505 t0= 0.513 tn= 0.026 tc= 1.552 ts= 0.408
+65536 PQueueDeque  th= 0.474 tm= 0.040 t0= 0.055 tn= 0.056 tc= 1.064 ts= 0.349
+65536 PQueueHeapq  th= 0.018 tm= 0.025 t0= 0.022 tn= 0.011 tc= 0.091 ts= 0.064
+65536 PQueueDList  th= 0.079 tm= 0.056 t0= 0.059 tn= 0.020 tc=65.359 ts= 0.079
+65536 PQueueLRU    th= 0.023 tm= 0.018 t0= 0.016 tn= 0.016 tc= 0.083 ts= 0.068
+

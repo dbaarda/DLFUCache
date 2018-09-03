@@ -1,46 +1,105 @@
 #!/usr/bin/python
-import random
+"""Tests for DLFUCache.
+
+For testing we use an integer cache key between 0 and MAXK.
+
+The access sequences are done using a variety of generator expressions
+designed to simulate various kinds of access patterns.
+
+"""
+import itertools
 import math
+import random
 from DLFUCache import *
 
-def get(c, i):
+
+# Default maximum cache key value.
+MAXK = 1<<32
+
+
+def get(cache, key):
+  """Get and set-on-miss cache accesses."""
   try:
-    return c[i]
+    return cache[key]
   except KeyError:
-    c[i] = i
+    cache[key] = key
 
-def sweep(c, n, o=0):  
-  for i in xrange(n):
-    for j in xrange(i+1):
-      get(c, j+o)
-  print c
-  c.reset_stats()
 
-def expdist(c, n, median, offset=0):
-  """Do n fetches using a exponetial distribution.
-  
-  Half the fetches will be less than median.
-  """
-  random.seed(7)
+def reflect(v, minv, maxv):
+  "Reflect a value back between limits min <= v < max."""
+  if v < minv:
+    return 2*minv - v
+  if v >= maxv:
+    return 2*maxv - v - 2
+  return v
+
+
+def cycle(*gens):
+  """Combines multiple access generators by cycling through them."""
+  for g in itertools.cycle(gens):
+    yield g.next()
+
+
+def expo(median, offset=0):
+  """Exponential distribution access generator."""
   lambd = math.log(2)/median
-  for i in xrange(n):
-    v = int(random.expovariate(lambd))+offset
-    get(c, v)
-  print c
-  c.reset_stats()
-  
-N = 100
-C = 100 * N
+  while True:
+    yield int(random.expovariate(lambd) + offset)
 
-for T in (0.0, 1.0, 2.0, 4.0, 8.0, 16.0, inf):
-  print "T = %f" % T
-  c = DLFUCache(N, T=T)
-  expdist(c, C, N/2)
-  expdist(c, C, N)
-  expdist(c, C, 2*N)
-  expdist(c, C, N/2, 2*N)
-  #sweep(c, 3*N)
-  #sweep(c, 3*N, N)
-  #sweep(c, 3*N)
-  #sweep(c, 3*N, 3*N)
 
+def walk(sigma, start=0, minv=0, maxv=MAXK):
+  """Stochastic "gaussian walk" access generator."""
+  mu = start
+  while True:
+    mu = reflect(random.gauss(mu, sigma), minv, maxv)
+    yield int(mu)
+
+
+def scan(start=0, step=1, minv=0, maxv=MAXK):
+  """Linear scan access generator."""
+  value = start
+  while True:
+    yield int(value)
+    value += step
+    if value > maxv:
+      value = minv
+
+
+def jump(median, duration, start=0.0, step=2.0):
+  """Jumping expo access generator."""
+  offset = start*median
+  while True:
+    for i in itertools.islice(expo(median, offset), duration):
+      yield i
+    offset += step*median
+
+
+def mixed(size):
+  """A nasty mixture of access generators."""
+  g1 = expo(size)
+  g2 = jump(size, 16*size)
+  g3 = walk(size/6.0)
+  g4 = scan()
+  return cycle(g1, g2, g3, g4)
+
+
+def runtest(name, cache, gen, count=1000):
+  """Do count accesses using an access generator."""
+  random.seed(7)
+  for key in itertools.islice(gen, count):
+    get(cache, key)
+  print name, cache
+  cache.reset_stats()
+
+
+if __name__ == '__main__':
+  N = 100
+  C = 100 * N
+  for T in (0.0, 1.0, 2.0, 4.0, 8.0, 16.0, inf):
+    for M in (0, N/2, N, 2*N):
+      #print "T = %f, msize = %s" % (T, M)
+      cache = DLFUCache(N, M, T=T)
+      runtest("expo", cache, expo(N), C)
+      runtest("walk", cache, walk(N/6.0), C)
+      runtest("jump", cache, jump(N, 16*N), C)
+      runtest("mixed", cache, mixed(N/2), C)

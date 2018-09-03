@@ -4,7 +4,7 @@ import bisect
 
 
 class PQueueVect(collections.MutableMapping):
-  """A PQueue implemented using Pythons list."""
+  """A PQueue implemented using Python's list."""
 
   __marker = object()
 
@@ -134,7 +134,7 @@ class PQueueDeque(PQueueVect):
 
 
 class PQueueHeapq(PQueueVect):
-  """A PQueue implemented using Pythons heapq."""
+  """A PQueue implemented using Python's heapq."""
 
   __deleted = object()
 

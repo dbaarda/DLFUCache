@@ -14,6 +14,7 @@ Requires:
 """
 import collections
 from PQueue import PQueueHeapq, PQueueLRU
+from PIDController import PIDController, LowPassFilter
 
 # Infinity, used to set T decay timeconstant for no decay.
 inf = float('inf')
@@ -29,7 +30,7 @@ class DLFUCache(collections.MutableMapping):
     msize: the number of extra metadata entries to keep.
     data: the underlying cache dict.
     C: The per-access count increment value.
-    T: The per-access decay timeconstant.
+    T: The per-size-accesses decay timeconstant.
     M: The exponential growth multiplier for C.
     cqueue: The cache priority queue.
     mqueue: The extra metadata priority queue.
@@ -49,8 +50,8 @@ class DLFUCache(collections.MutableMapping):
     self.msize = msize
     self.data = {}
     self.C = 1.0
-    self.T = T * size
-    if self.T <= 1.0:
+    self.T = T
+    if self.T*size <= 1.0:
       # Behave like LRU with no exponential decay of counts.
       self.M = 1.0
       PQueue = PQueueLRU
@@ -60,7 +61,7 @@ class DLFUCache(collections.MutableMapping):
       PQueue = PQueueHeapq
     else:
       # Behave like DLFU with exponentail decay of counts.
-      self.M = (self.T + 1.0) / self.T
+      self.M = (self.T*size + 1.0) / (self.T*size)
       PQueue = PQueueHeapq
     self.cqueue = PQueue()
     self.mqueue = PQueue()
@@ -74,6 +75,32 @@ class DLFUCache(collections.MutableMapping):
     self.del_count = 0
     self.hit_count = 0
     self.mhit_count = 0
+
+  @property
+  def count_avg(self):
+    """The cache contents average access count."""
+    return self.csum / (self.C * self.size)
+
+  @property
+  def mcount_avg(self):
+    """The extra metadata average access count."""
+    if self.msize > 0:
+      return self.msum / (self.C * self.msize)
+    return nan
+
+  @property
+  def hit_rate(self):
+    """The cache contents hit rate."""
+    if self.get_count > 0:
+      return float(self.hit_count) / self.get_count
+    return nan
+
+  @property
+  def mhit_rate(self):
+    """The extra metadata hit rate."""
+    if self.get_count > 0:
+      return float(self.mhit_count) / self.get_count
+    return nan
 
   def _inccqueue(self, key):
     """Increment the access count of a cqueue entry."""
@@ -181,24 +208,34 @@ class DLFUCache(collections.MutableMapping):
       return self.mqueue[key] / self.C
     return 0.0
 
-  def getstats(self):
-    if self.get_count > 0:
-      hit_rate = float(self.hit_count) / self.get_count
-      mhit_rate = float(self.mhit_count) / self.get_count
-    else:
-      hit_rate = mhit_rate = nan
-    cavg = self.csum / (self.C * self.size)
-    if self.msize > 0:
-      mavg = self.msum / (self.C * self.msize)
-    else:
-      mavg = nan
-    return self.get_count, self.set_count, self.del_count, hit_rate, mhit_rate, cavg, mavg
-
   def __repr__(self):
     return "%s(size=%s, msize=%s, T=%s)" % (
-        self.__class__.__name__, self.size, self.msize, self.T/self.size)
+        self.__class__.__name__, self.size, self.msize, self.T)
 
   def __str__(self):
-    gets, sets, dels, hit, mhit, cavg, mavg = self.getstats()
-    return "%r: gets=%i hit=%5.3f mhit=%5.3f cavg=%5.3f mavg=%5.3f" % (
-        self, gets, hit, mhit, cavg, mavg)
+    return "%r: gets=%i hit=%5.3f mhit=%5.3f avg=%5.3f mavg=%5.3f" % (
+        self, self.get_count, self.hit_rate, self.mhit_rate, self.count_avg,
+        self.mcount_avg)
+
+
+class ADLFUCache(DLFUCache):
+  """An Adaptive Decaying LFU Cache."""
+
+  def __init__(self, size, msize=None):
+    super(ADLFUCache, self).__init__(size, msize, 8.0)
+    self.lpf = LowPassFilter(size/8.0)
+    self.pid = PIDController.StandardForm(1.0, 2.0*size, size/2.0, 0.0)
+
+  def __getitem__(self, key):
+    # Get the low-pass filtered count.
+    count = self.lpf.update(self.getcount(key)+1.0)
+    mean = self.count_avg
+    # Note 0 <= count <= T*size, 0 <= mean <= T.
+    # This gives error in the range of almost -1 to 1.
+    error = (count - mean)/(count + mean + 0.001)
+    control = self.pid.update(error, 1.0)
+    print self.pid, self
+    # Transform the pid control output into 0.0 <= T < 40.0 and T=4.0 when control=0.0.
+    self.T = 5.0 * (1.0 + control) / (1.25 - control)
+    self.M = (self.T*self.size + 1.0) / (self.T*self.size)
+    ret = super(ADLFUCache, self).__getitem__(key)

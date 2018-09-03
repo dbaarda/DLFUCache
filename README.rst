@@ -27,6 +27,8 @@ LICENSE      Copyright and licencing details.
 DESIGN.rst   Design details and description.
 PQueue.py    Python priority queue implementations.
 DLFUCache.py Python DLFU cache implementation.
+*_perf.py    Performance tests of the corresponding module.
+*.out        Output data for the corresponding test.
 ============ =======================================================
 
 Credits
@@ -72,9 +74,10 @@ will be expired out of the cache.
 The timeconstant T argument lets you tune the decay period for the
 access counts. Setting T=float(inf) makes the cache behave like an LFU
 cache (the counts are never decayed) with the addition that counts are
-retained for more entries than are kept in the cache. Setting T=0.0
-makes the cache behave like a pure LRU cache, and counts never
-accumulate.
+retained for msize more entries than are kept in the cache. Setting
+T=0.0 makes the cache behave like a pure LRU cache, counts never
+decay, and msize can be used to retain access count history for more
+entries than are in the cache.
 
 Support
 =======

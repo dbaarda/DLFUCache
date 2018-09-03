@@ -87,27 +87,27 @@ class DLFUCache(collections.MutableMapping):
 
   def _setmqueue(self, k, p):
     """Set the access count of a new mqueue entry."""
-    if len(self.mqueue) == self.msize:
-      # Flush an old entry out.
-      mink, minp = self.mqueue.swapitem(k, p)
-      self.msum += p - minp
-    elif self.msize > 0:
+    if len(self.mqueue) < self.msize:
       # Just add a new entry.
       self.mqueue[k] = p
       self.msum += p
+    elif self.mqueue:
+      # Flush an old entry out.
+      mink, minp = self.mqueue.swapitem(k, p)
+      self.msum += p - minp
 
   def _setcqueue(self, k, p):
     """Set the access count of a new cqueue entry."""
-    if len(self.cqueue) == self.size:
+    if len(self.cqueue) < self.size:
+      # Just add a new entry.
+      self.cqueue[k] = p
+      self.csum += p
+    else:
       # Cascade a flushed entry to the mqueue.
       mink, minp = self.cqueue.swapitem(k, p)
       self._setmqueue(mink, minp)
       self.csum += p - minp
       del self.data[mink]
-    else:
-      # Just add a new entry.
-      self.cqueue[k] = p
-      self.csum += p
 
   def _movcqueue(self, k):
     """Move a cqueue entry to the mqueue."""
@@ -188,7 +188,10 @@ class DLFUCache(collections.MutableMapping):
     else:
       hit_rate = mhit_rate = nan
     cavg = self.csum / (self.C * self.size)
-    mavg = self.msum / (self.C * self.msize)
+    if self.msize > 0:
+      mavg = self.msum / (self.C * self.msize)
+    else:
+      mavg = nan
     return self.get_count, self.set_count, self.del_count, hit_rate, mhit_rate, cavg, mavg
 
   def __repr__(self):

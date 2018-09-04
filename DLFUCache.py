@@ -209,7 +209,7 @@ class DLFUCache(collections.MutableMapping):
     return 0.0
 
   def __repr__(self):
-    return "%s(size=%s, msize=%s, T=%s)" % (
+    return "%s(size=%s, msize=%s, T=%5.3f)" % (
         self.__class__.__name__, self.size, self.msize, self.T)
 
   def __str__(self):
@@ -224,7 +224,7 @@ class ADLFUCache(DLFUCache):
   def __init__(self, size, msize=None):
     super(ADLFUCache, self).__init__(size, msize, 8.0)
     self.lpf = LowPassFilter(size/8.0)
-    self.pid = PIDController.StandardForm(1.0, 2.0*size, size/2.0, 0.0)
+    self.pid = PIDController.StandardForm(1.0, 4.0*size, size/4.0)
 
   def __getitem__(self, key):
     # Get the low-pass filtered count.
@@ -234,8 +234,7 @@ class ADLFUCache(DLFUCache):
     # This gives error in the range of almost -1 to 1.
     error = (count - mean)/(count + mean + 0.001)
     control = self.pid.update(error, 1.0)
-    print self.pid, self
-    # Transform the pid control output into 0.0 <= T < 40.0 and T=4.0 when control=0.0.
-    self.T = 5.0 * (1.0 + control) / (1.25 - control)
+    # Transform the pid control output into 0.0 < T < inf and T=4.0 when control=0.0.
+    self.T = 4.0 * (1.1 + control) / (1.1 - control)
     self.M = (self.T*self.size + 1.0) / (self.T*self.size)
     ret = super(ADLFUCache, self).__getitem__(key)

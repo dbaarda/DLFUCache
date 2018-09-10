@@ -1,112 +1,112 @@
-expo DLFUCache(size=100, msize=0, T=0.0): gets=10000 hit=0.323 mhit=0.000 cavg=1.420 mavg=  nan
-walk DLFUCache(size=100, msize=0, T=0.0): gets=10000 hit=0.398 mhit=0.000 cavg=1.530 mavg=  nan
-jump DLFUCache(size=100, msize=0, T=0.0): gets=10000 hit=0.316 mhit=0.000 cavg=1.420 mavg=  nan
-mixed DLFUCache(size=100, msize=0, T=0.0): gets=10000 hit=0.300 mhit=0.000 cavg=1.300 mavg=  nan
-expo DLFUCache(size=100, msize=50, T=0.0): gets=10000 hit=0.323 mhit=0.143 cavg=1.900 mavg=1.820
-walk DLFUCache(size=100, msize=50, T=0.0): gets=10000 hit=0.398 mhit=0.085 cavg=1.730 mavg=2.940
-jump DLFUCache(size=100, msize=50, T=0.0): gets=10000 hit=0.316 mhit=0.132 cavg=1.760 mavg=1.480
-mixed DLFUCache(size=100, msize=50, T=0.0): gets=10000 hit=0.300 mhit=0.092 cavg=1.530 mavg=1.240
-expo DLFUCache(size=100, msize=100, T=0.0): gets=10000 hit=0.323 mhit=0.262 cavg=2.840 mavg=2.750
-walk DLFUCache(size=100, msize=100, T=0.0): gets=10000 hit=0.398 mhit=0.158 cavg=1.750 mavg=4.020
-jump DLFUCache(size=100, msize=100, T=0.0): gets=10000 hit=0.316 mhit=0.240 cavg=2.270 mavg=1.580
-mixed DLFUCache(size=100, msize=100, T=0.0): gets=10000 hit=0.300 mhit=0.166 cavg=1.790 mavg=1.680
-expo DLFUCache(size=100, msize=200, T=0.0): gets=10000 hit=0.323 mhit=0.443 cavg=11.020 mavg=7.910
-walk DLFUCache(size=100, msize=200, T=0.0): gets=10000 hit=0.398 mhit=0.241 cavg=1.780 mavg=3.435
-jump DLFUCache(size=100, msize=200, T=0.0): gets=10000 hit=0.316 mhit=0.385 cavg=2.690 mavg=3.185
-mixed DLFUCache(size=100, msize=200, T=0.0): gets=10000 hit=0.300 mhit=0.269 cavg=2.200 mavg=2.065
-expo DLFUCache(size=100, msize=0, T=1.0): gets=10000 hit=0.336 mhit=0.000 cavg=0.763 mavg=  nan
-walk DLFUCache(size=100, msize=0, T=1.0): gets=10000 hit=0.395 mhit=0.000 cavg=0.785 mavg=  nan
-jump DLFUCache(size=100, msize=0, T=1.0): gets=10000 hit=0.324 mhit=0.000 cavg=0.762 mavg=  nan
-mixed DLFUCache(size=100, msize=0, T=1.0): gets=10000 hit=0.315 mhit=0.000 cavg=0.726 mavg=  nan
-expo DLFUCache(size=100, msize=50, T=1.0): gets=10000 hit=0.338 mhit=0.138 cavg=0.795 mavg=0.255
-walk DLFUCache(size=100, msize=50, T=1.0): gets=10000 hit=0.394 mhit=0.089 cavg=0.787 mavg=0.272
-jump DLFUCache(size=100, msize=50, T=1.0): gets=10000 hit=0.326 mhit=0.128 cavg=0.792 mavg=0.251
-mixed DLFUCache(size=100, msize=50, T=1.0): gets=10000 hit=0.317 mhit=0.087 cavg=0.750 mavg=0.258
-expo DLFUCache(size=100, msize=100, T=1.0): gets=10000 hit=0.338 mhit=0.255 cavg=0.806 mavg=0.182
-walk DLFUCache(size=100, msize=100, T=1.0): gets=10000 hit=0.395 mhit=0.158 cavg=0.789 mavg=0.203
-jump DLFUCache(size=100, msize=100, T=1.0): gets=10000 hit=0.326 mhit=0.232 cavg=0.803 mavg=0.178
-mixed DLFUCache(size=100, msize=100, T=1.0): gets=10000 hit=0.319 mhit=0.157 cavg=0.756 mavg=0.198
-expo DLFUCache(size=100, msize=200, T=1.0): gets=10000 hit=0.339 mhit=0.430 cavg=0.810 mavg=0.100
-walk DLFUCache(size=100, msize=200, T=1.0): gets=10000 hit=0.394 mhit=0.244 cavg=0.789 mavg=0.110
-jump DLFUCache(size=100, msize=200, T=1.0): gets=10000 hit=0.326 mhit=0.376 cavg=0.806 mavg=0.100
-mixed DLFUCache(size=100, msize=200, T=1.0): gets=10000 hit=0.319 mhit=0.257 cavg=0.758 mavg=0.121
-expo DLFUCache(size=100, msize=0, T=2.0): gets=10000 hit=0.359 mhit=0.000 cavg=1.093 mavg=  nan
-walk DLFUCache(size=100, msize=0, T=2.0): gets=10000 hit=0.388 mhit=0.000 cavg=1.166 mavg=  nan
-jump DLFUCache(size=100, msize=0, T=2.0): gets=10000 hit=0.338 mhit=0.000 cavg=1.072 mavg=  nan
-mixed DLFUCache(size=100, msize=0, T=2.0): gets=10000 hit=0.337 mhit=0.000 cavg=1.019 mavg=  nan
-expo DLFUCache(size=100, msize=50, T=2.0): gets=10000 hit=0.371 mhit=0.123 cavg=1.238 mavg=0.598
-walk DLFUCache(size=100, msize=50, T=2.0): gets=10000 hit=0.384 mhit=0.094 cavg=1.205 mavg=0.687
-jump DLFUCache(size=100, msize=50, T=2.0): gets=10000 hit=0.345 mhit=0.115 cavg=1.178 mavg=0.553
-mixed DLFUCache(size=100, msize=50, T=2.0): gets=10000 hit=0.344 mhit=0.080 cavg=1.075 mavg=0.556
-expo DLFUCache(size=100, msize=100, T=2.0): gets=10000 hit=0.374 mhit=0.235 cavg=1.302 mavg=0.502
-walk DLFUCache(size=100, msize=100, T=2.0): gets=10000 hit=0.384 mhit=0.161 cavg=1.213 mavg=0.601
-jump DLFUCache(size=100, msize=100, T=2.0): gets=10000 hit=0.347 mhit=0.214 cavg=1.225 mavg=0.458
-mixed DLFUCache(size=100, msize=100, T=2.0): gets=10000 hit=0.348 mhit=0.147 cavg=1.115 mavg=0.483
-expo DLFUCache(size=100, msize=200, T=2.0): gets=10000 hit=0.377 mhit=0.398 cavg=1.328 mavg=0.331
-walk DLFUCache(size=100, msize=200, T=2.0): gets=10000 hit=0.384 mhit=0.254 cavg=1.214 mavg=0.385
-jump DLFUCache(size=100, msize=200, T=2.0): gets=10000 hit=0.350 mhit=0.350 cavg=1.257 mavg=0.328
-mixed DLFUCache(size=100, msize=200, T=2.0): gets=10000 hit=0.351 mhit=0.234 cavg=1.130 mavg=0.360
-expo DLFUCache(size=100, msize=0, T=4.0): gets=10000 hit=0.408 mhit=0.000 cavg=1.747 mavg=  nan
-walk DLFUCache(size=100, msize=0, T=4.0): gets=10000 hit=0.344 mhit=0.000 cavg=1.733 mavg=  nan
-jump DLFUCache(size=100, msize=0, T=4.0): gets=10000 hit=0.325 mhit=0.000 cavg=1.278 mavg=  nan
-mixed DLFUCache(size=100, msize=0, T=4.0): gets=10000 hit=0.369 mhit=0.000 cavg=1.430 mavg=  nan
-expo DLFUCache(size=100, msize=50, T=4.0): gets=10000 hit=0.427 mhit=0.112 cavg=2.062 mavg=0.878
-walk DLFUCache(size=100, msize=50, T=4.0): gets=10000 hit=0.303 mhit=0.141 cavg=1.939 mavg=0.996
-jump DLFUCache(size=100, msize=50, T=4.0): gets=10000 hit=0.332 mhit=0.110 cavg=1.523 mavg=0.835
-mixed DLFUCache(size=100, msize=50, T=4.0): gets=10000 hit=0.386 mhit=0.078 cavg=1.581 mavg=0.829
-expo DLFUCache(size=100, msize=100, T=4.0): gets=10000 hit=0.428 mhit=0.214 cavg=2.215 mavg=0.906
-walk DLFUCache(size=100, msize=100, T=4.0): gets=10000 hit=0.290 mhit=0.230 cavg=2.004 mavg=0.991
-jump DLFUCache(size=100, msize=100, T=4.0): gets=10000 hit=0.343 mhit=0.201 cavg=1.647 mavg=0.818
-mixed DLFUCache(size=100, msize=100, T=4.0): gets=10000 hit=0.397 mhit=0.129 cavg=1.670 mavg=0.790
-expo DLFUCache(size=100, msize=200, T=4.0): gets=10000 hit=0.424 mhit=0.363 cavg=2.302 mavg=0.755
-walk DLFUCache(size=100, msize=200, T=4.0): gets=10000 hit=0.298 mhit=0.330 cavg=2.019 mavg=0.775
-jump DLFUCache(size=100, msize=200, T=4.0): gets=10000 hit=0.357 mhit=0.324 cavg=1.838 mavg=0.754
-mixed DLFUCache(size=100, msize=200, T=4.0): gets=10000 hit=0.400 mhit=0.210 cavg=1.771 mavg=0.684
-expo DLFUCache(size=100, msize=0, T=8.0): gets=10000 hit=0.444 mhit=0.000 cavg=3.500 mavg=  nan
-walk DLFUCache(size=100, msize=0, T=8.0): gets=10000 hit=0.232 mhit=0.000 cavg=2.142 mavg=  nan
-jump DLFUCache(size=100, msize=0, T=8.0): gets=10000 hit=0.239 mhit=0.000 cavg=1.788 mavg=  nan
-mixed DLFUCache(size=100, msize=0, T=8.0): gets=10000 hit=0.374 mhit=0.000 cavg=2.596 mavg=  nan
-expo DLFUCache(size=100, msize=50, T=8.0): gets=10000 hit=0.459 mhit=0.122 cavg=4.062 mavg=1.563
-walk DLFUCache(size=100, msize=50, T=8.0): gets=10000 hit=0.215 mhit=0.122 cavg=2.518 mavg=1.191
-jump DLFUCache(size=100, msize=50, T=8.0): gets=10000 hit=0.258 mhit=0.088 cavg=2.132 mavg=1.027
-mixed DLFUCache(size=100, msize=50, T=8.0): gets=10000 hit=0.395 mhit=0.102 cavg=2.904 mavg=1.122
-expo DLFUCache(size=100, msize=100, T=8.0): gets=10000 hit=0.455 mhit=0.228 cavg=4.189 mavg=1.650
-walk DLFUCache(size=100, msize=100, T=8.0): gets=10000 hit=0.237 mhit=0.192 cavg=2.770 mavg=1.230
-jump DLFUCache(size=100, msize=100, T=8.0): gets=10000 hit=0.291 mhit=0.156 cavg=2.492 mavg=1.169
-mixed DLFUCache(size=100, msize=100, T=8.0): gets=10000 hit=0.401 mhit=0.155 cavg=2.987 mavg=1.204
-expo DLFUCache(size=100, msize=200, T=8.0): gets=10000 hit=0.450 mhit=0.353 cavg=4.230 mavg=1.469
-walk DLFUCache(size=100, msize=200, T=8.0): gets=10000 hit=0.249 mhit=0.323 cavg=3.035 mavg=1.186
-jump DLFUCache(size=100, msize=200, T=8.0): gets=10000 hit=0.315 mhit=0.297 cavg=2.824 mavg=1.322
-mixed DLFUCache(size=100, msize=200, T=8.0): gets=10000 hit=0.403 mhit=0.225 cavg=3.126 mavg=1.137
-expo DLFUCache(size=100, msize=0, T=16.0): gets=10000 hit=0.439 mhit=0.000 cavg=7.133 mavg=  nan
-walk DLFUCache(size=100, msize=0, T=16.0): gets=10000 hit=0.127 mhit=0.000 cavg=2.225 mavg=  nan
-jump DLFUCache(size=100, msize=0, T=16.0): gets=10000 hit=0.155 mhit=0.000 cavg=2.410 mavg=  nan
-mixed DLFUCache(size=100, msize=0, T=16.0): gets=10000 hit=0.333 mhit=0.000 cavg=4.986 mavg=  nan
-expo DLFUCache(size=100, msize=50, T=16.0): gets=10000 hit=0.464 mhit=0.118 cavg=7.905 mavg=3.353
-walk DLFUCache(size=100, msize=50, T=16.0): gets=10000 hit=0.143 mhit=0.054 cavg=2.862 mavg=1.172
-jump DLFUCache(size=100, msize=50, T=16.0): gets=10000 hit=0.183 mhit=0.051 cavg=2.945 mavg=1.238
-mixed DLFUCache(size=100, msize=50, T=16.0): gets=10000 hit=0.367 mhit=0.101 cavg=5.835 mavg=2.532
-expo DLFUCache(size=100, msize=100, T=16.0): gets=10000 hit=0.465 mhit=0.232 cavg=8.062 mavg=3.459
-walk DLFUCache(size=100, msize=100, T=16.0): gets=10000 hit=0.155 mhit=0.105 cavg=3.482 mavg=1.377
-jump DLFUCache(size=100, msize=100, T=16.0): gets=10000 hit=0.194 mhit=0.109 cavg=3.285 mavg=1.415
-mixed DLFUCache(size=100, msize=100, T=16.0): gets=10000 hit=0.376 mhit=0.158 cavg=5.964 mavg=2.450
-expo DLFUCache(size=100, msize=200, T=16.0): gets=10000 hit=0.464 mhit=0.354 cavg=8.097 mavg=2.807
-walk DLFUCache(size=100, msize=200, T=16.0): gets=10000 hit=0.165 mhit=0.224 cavg=3.869 mavg=1.571
-jump DLFUCache(size=100, msize=200, T=16.0): gets=10000 hit=0.225 mhit=0.217 cavg=3.892 mavg=1.591
-mixed DLFUCache(size=100, msize=200, T=16.0): gets=10000 hit=0.384 mhit=0.230 cavg=6.041 mavg=2.122
-expo DLFUCache(size=100, msize=0, T=inf): gets=10000 hit=0.323 mhit=0.000 cavg=33.120 mavg=  nan
-walk DLFUCache(size=100, msize=0, T=inf): gets=10000 hit=0.049 mhit=0.000 cavg=35.410 mavg=  nan
-jump DLFUCache(size=100, msize=0, T=inf): gets=10000 hit=0.081 mhit=0.000 cavg=43.160 mavg=  nan
-mixed DLFUCache(size=100, msize=0, T=inf): gets=10000 hit=0.292 mhit=0.000 cavg=72.210 mavg=  nan
-expo DLFUCache(size=100, msize=50, T=inf): gets=10000 hit=0.407 mhit=0.073 cavg=43.030 mavg=12.240
-walk DLFUCache(size=100, msize=50, T=inf): gets=10000 hit=0.038 mhit=0.047 cavg=44.270 mavg=18.100
-jump DLFUCache(size=100, msize=50, T=inf): gets=10000 hit=0.089 mhit=0.040 cavg=52.870 mavg=25.420
-mixed DLFUCache(size=100, msize=50, T=inf): gets=10000 hit=0.372 mhit=0.055 cavg=90.250 mavg=35.340
-expo DLFUCache(size=100, msize=100, T=inf): gets=10000 hit=0.436 mhit=0.151 cavg=46.570 mavg=13.930
-walk DLFUCache(size=100, msize=100, T=inf): gets=10000 hit=0.035 mhit=0.071 cavg=47.310 mavg=19.630
-jump DLFUCache(size=100, msize=100, T=inf): gets=10000 hit=0.087 mhit=0.081 cavg=55.830 mavg=27.370
-mixed DLFUCache(size=100, msize=100, T=inf): gets=10000 hit=0.404 mhit=0.121 cavg=96.530 mavg=38.960
-expo DLFUCache(size=100, msize=200, T=inf): gets=10000 hit=0.468 mhit=0.299 cavg=50.410 mavg=14.650
-walk DLFUCache(size=100, msize=200, T=inf): gets=10000 hit=0.035 mhit=0.130 cavg=51.190 mavg=20.440
-jump DLFUCache(size=100, msize=200, T=inf): gets=10000 hit=0.089 mhit=0.147 cavg=59.830 mavg=27.595
-mixed DLFUCache(size=100, msize=200, T=inf): gets=10000 hit=0.418 mhit=0.244 cavg=102.000 mavg=39.485
+expo DLFUCache(size=100, msize=0, T=0.0): gets=10000 hit=0.323 avg=1.420 var=0.484 mhit=0.000 mavg=  nan mvar=  nan
+walk DLFUCache(size=100, msize=0, T=0.0): gets=10000 hit=0.398 avg=1.530 var=0.909 mhit=0.000 mavg=  nan mvar=  nan
+jump DLFUCache(size=100, msize=0, T=0.0): gets=10000 hit=0.316 avg=1.420 var=0.484 mhit=0.000 mavg=  nan mvar=  nan
+mixed DLFUCache(size=100, msize=0, T=0.0): gets=10000 hit=0.300 avg=1.300 var=0.410 mhit=0.000 mavg=  nan mvar=  nan
+expo DLFUCache(size=100, msize=50, T=0.0): gets=10000 hit=0.323 avg=1.900 var=2.030 mhit=0.143 mavg=1.820 mvar=2.268
+walk DLFUCache(size=100, msize=50, T=0.0): gets=10000 hit=0.398 avg=1.730 var=1.497 mhit=0.085 mavg=2.940 mvar=5.496
+jump DLFUCache(size=100, msize=50, T=0.0): gets=10000 hit=0.316 avg=1.760 var=0.902 mhit=0.132 mavg=1.480 mvar=0.770
+mixed DLFUCache(size=100, msize=50, T=0.0): gets=10000 hit=0.300 avg=1.530 var=0.889 mhit=0.092 mavg=1.240 mvar=0.502
+expo DLFUCache(size=100, msize=100, T=0.0): gets=10000 hit=0.323 avg=2.840 var=5.494 mhit=0.262 mavg=2.750 mvar=11.148
+walk DLFUCache(size=100, msize=100, T=0.0): gets=10000 hit=0.398 avg=1.750 var=1.527 mhit=0.158 mavg=4.020 mvar=4.960
+jump DLFUCache(size=100, msize=100, T=0.0): gets=10000 hit=0.316 avg=2.270 var=1.637 mhit=0.240 mavg=1.580 mvar=0.904
+mixed DLFUCache(size=100, msize=100, T=0.0): gets=10000 hit=0.300 avg=1.790 var=1.666 mhit=0.166 mavg=1.680 mvar=2.818
+expo DLFUCache(size=100, msize=200, T=0.0): gets=10000 hit=0.323 avg=11.020 var=243.080 mhit=0.443 mavg=7.910 mvar=194.362
+walk DLFUCache(size=100, msize=200, T=0.0): gets=10000 hit=0.398 avg=1.780 var=1.512 mhit=0.241 mavg=3.435 mvar=4.416
+jump DLFUCache(size=100, msize=200, T=0.0): gets=10000 hit=0.316 avg=2.690 var=3.014 mhit=0.385 mavg=3.185 mvar=9.931
+mixed DLFUCache(size=100, msize=200, T=0.0): gets=10000 hit=0.300 avg=2.200 var=5.560 mhit=0.269 mavg=2.065 mvar=8.091
+expo DLFUCache(size=100, msize=0, T=1.0): gets=10000 hit=0.336 avg=0.763 var=0.116 mhit=0.000 mavg=  nan mvar=  nan
+walk DLFUCache(size=100, msize=0, T=1.0): gets=10000 hit=0.395 avg=0.785 var=0.115 mhit=0.000 mavg=  nan mvar=  nan
+jump DLFUCache(size=100, msize=0, T=1.0): gets=10000 hit=0.324 avg=0.762 var=0.116 mhit=0.000 mavg=  nan mvar=  nan
+mixed DLFUCache(size=100, msize=0, T=1.0): gets=10000 hit=0.315 avg=0.726 var=0.086 mhit=0.000 mavg=  nan mvar=  nan
+expo DLFUCache(size=100, msize=50, T=1.0): gets=10000 hit=0.338 avg=0.795 var=0.113 mhit=0.138 mavg=0.255 mvar=0.004
+walk DLFUCache(size=100, msize=50, T=1.0): gets=10000 hit=0.394 avg=0.787 var=0.114 mhit=0.089 mavg=0.272 mvar=0.002
+jump DLFUCache(size=100, msize=50, T=1.0): gets=10000 hit=0.326 avg=0.792 var=0.113 mhit=0.128 mavg=0.251 mvar=0.004
+mixed DLFUCache(size=100, msize=50, T=1.0): gets=10000 hit=0.317 avg=0.750 var=0.096 mhit=0.087 mavg=0.258 mvar=0.002
+expo DLFUCache(size=100, msize=100, T=1.0): gets=10000 hit=0.338 avg=0.806 var=0.114 mhit=0.255 mavg=0.182 mvar=0.009
+walk DLFUCache(size=100, msize=100, T=1.0): gets=10000 hit=0.395 avg=0.789 var=0.113 mhit=0.158 mavg=0.203 mvar=0.007
+jump DLFUCache(size=100, msize=100, T=1.0): gets=10000 hit=0.326 avg=0.803 var=0.115 mhit=0.232 mavg=0.178 mvar=0.009
+mixed DLFUCache(size=100, msize=100, T=1.0): gets=10000 hit=0.319 avg=0.756 var=0.096 mhit=0.157 mavg=0.198 mvar=0.005
+expo DLFUCache(size=100, msize=200, T=1.0): gets=10000 hit=0.339 avg=0.810 var=0.115 mhit=0.430 mavg=0.100 mvar=0.011
+walk DLFUCache(size=100, msize=200, T=1.0): gets=10000 hit=0.394 avg=0.789 var=0.113 mhit=0.244 mavg=0.110 mvar=0.012
+jump DLFUCache(size=100, msize=200, T=1.0): gets=10000 hit=0.326 avg=0.806 var=0.114 mhit=0.376 mavg=0.100 mvar=0.011
+mixed DLFUCache(size=100, msize=200, T=1.0): gets=10000 hit=0.319 avg=0.758 var=0.096 mhit=0.257 mavg=0.121 mvar=0.009
+expo DLFUCache(size=100, msize=0, T=2.0): gets=10000 hit=0.359 avg=1.093 var=0.186 mhit=0.000 mavg=  nan mvar=  nan
+walk DLFUCache(size=100, msize=0, T=2.0): gets=10000 hit=0.388 avg=1.166 var=0.164 mhit=0.000 mavg=  nan mvar=  nan
+jump DLFUCache(size=100, msize=0, T=2.0): gets=10000 hit=0.338 avg=1.072 var=0.183 mhit=0.000 mavg=  nan mvar=  nan
+mixed DLFUCache(size=100, msize=0, T=2.0): gets=10000 hit=0.337 avg=1.019 var=0.142 mhit=0.000 mavg=  nan mvar=  nan
+expo DLFUCache(size=100, msize=50, T=2.0): gets=10000 hit=0.371 avg=1.238 var=0.178 mhit=0.123 mavg=0.598 mvar=0.005
+walk DLFUCache(size=100, msize=50, T=2.0): gets=10000 hit=0.384 avg=1.205 var=0.164 mhit=0.094 mavg=0.687 mvar=0.004
+jump DLFUCache(size=100, msize=50, T=2.0): gets=10000 hit=0.345 avg=1.178 var=0.168 mhit=0.115 mavg=0.553 mvar=0.005
+mixed DLFUCache(size=100, msize=50, T=2.0): gets=10000 hit=0.344 avg=1.075 var=0.179 mhit=0.080 mavg=0.556 mvar=0.003
+expo DLFUCache(size=100, msize=100, T=2.0): gets=10000 hit=0.374 avg=1.302 var=0.161 mhit=0.235 mavg=0.502 mvar=0.020
+walk DLFUCache(size=100, msize=100, T=2.0): gets=10000 hit=0.384 avg=1.213 var=0.161 mhit=0.161 mavg=0.601 mvar=0.015
+jump DLFUCache(size=100, msize=100, T=2.0): gets=10000 hit=0.347 avg=1.225 var=0.166 mhit=0.214 mavg=0.458 mvar=0.017
+mixed DLFUCache(size=100, msize=100, T=2.0): gets=10000 hit=0.348 avg=1.115 var=0.186 mhit=0.147 mavg=0.483 mvar=0.011
+expo DLFUCache(size=100, msize=200, T=2.0): gets=10000 hit=0.377 avg=1.328 var=0.164 mhit=0.398 mavg=0.331 mvar=0.052
+walk DLFUCache(size=100, msize=200, T=2.0): gets=10000 hit=0.384 avg=1.214 var=0.161 mhit=0.254 mavg=0.385 mvar=0.060
+jump DLFUCache(size=100, msize=200, T=2.0): gets=10000 hit=0.350 avg=1.257 var=0.156 mhit=0.350 mavg=0.328 mvar=0.029
+mixed DLFUCache(size=100, msize=200, T=2.0): gets=10000 hit=0.351 avg=1.130 var=0.182 mhit=0.234 mavg=0.360 mvar=0.026
+expo DLFUCache(size=100, msize=0, T=4.0): gets=10000 hit=0.408 avg=1.747 var=0.601 mhit=0.000 mavg=  nan mvar=  nan
+walk DLFUCache(size=100, msize=0, T=4.0): gets=10000 hit=0.344 avg=1.733 var=0.431 mhit=0.000 mavg=  nan mvar=  nan
+jump DLFUCache(size=100, msize=0, T=4.0): gets=10000 hit=0.325 avg=1.278 var=0.243 mhit=0.000 mavg=  nan mvar=  nan
+mixed DLFUCache(size=100, msize=0, T=4.0): gets=10000 hit=0.369 avg=1.430 var=0.408 mhit=0.000 mavg=  nan mvar=  nan
+expo DLFUCache(size=100, msize=50, T=4.0): gets=10000 hit=0.427 avg=2.062 var=0.457 mhit=0.112 mavg=0.878 mvar=0.005
+walk DLFUCache(size=100, msize=50, T=4.0): gets=10000 hit=0.298 avg=1.941 var=0.384 mhit=0.145 mavg=0.993 mvar=0.005
+jump DLFUCache(size=100, msize=50, T=4.0): gets=10000 hit=0.332 avg=1.523 var=0.309 mhit=0.110 mavg=0.835 mvar=0.002
+mixed DLFUCache(size=100, msize=50, T=4.0): gets=10000 hit=0.386 avg=1.581 var=0.440 mhit=0.078 mavg=0.829 mvar=0.002
+expo DLFUCache(size=100, msize=100, T=4.0): gets=10000 hit=0.428 avg=2.215 var=0.371 mhit=0.213 mavg=0.906 mvar=0.060
+walk DLFUCache(size=100, msize=100, T=4.0): gets=10000 hit=0.282 avg=2.007 var=0.358 mhit=0.238 mavg=0.988 mvar=0.016
+jump DLFUCache(size=100, msize=100, T=4.0): gets=10000 hit=0.343 avg=1.647 var=0.290 mhit=0.201 mavg=0.818 mvar=0.006
+mixed DLFUCache(size=100, msize=100, T=4.0): gets=10000 hit=0.398 avg=1.670 var=0.426 mhit=0.129 mavg=0.790 mvar=0.006
+expo DLFUCache(size=100, msize=200, T=4.0): gets=10000 hit=0.425 avg=2.302 var=0.331 mhit=0.362 mavg=0.755 mvar=0.125
+walk DLFUCache(size=100, msize=200, T=4.0): gets=10000 hit=0.288 avg=2.023 var=0.350 mhit=0.341 mavg=0.773 mvar=0.081
+jump DLFUCache(size=100, msize=200, T=4.0): gets=10000 hit=0.357 avg=1.839 var=0.250 mhit=0.323 mavg=0.753 mvar=0.029
+mixed DLFUCache(size=100, msize=200, T=4.0): gets=10000 hit=0.401 avg=1.771 var=0.403 mhit=0.208 mavg=0.684 mvar=0.026
+expo DLFUCache(size=100, msize=0, T=8.0): gets=10000 hit=0.444 avg=3.489 var=2.387 mhit=0.000 mavg=  nan mvar=  nan
+walk DLFUCache(size=100, msize=0, T=8.0): gets=10000 hit=0.231 avg=2.142 var=0.816 mhit=0.000 mavg=  nan mvar=  nan
+jump DLFUCache(size=100, msize=0, T=8.0): gets=10000 hit=0.239 avg=1.788 var=0.556 mhit=0.000 mavg=  nan mvar=  nan
+mixed DLFUCache(size=100, msize=0, T=8.0): gets=10000 hit=0.374 avg=2.596 var=1.515 mhit=0.000 mavg=  nan mvar=  nan
+expo DLFUCache(size=100, msize=50, T=8.0): gets=10000 hit=0.460 avg=4.078 var=1.133 mhit=0.121 mavg=1.532 mvar=0.227
+walk DLFUCache(size=100, msize=50, T=8.0): gets=10000 hit=0.195 avg=2.519 var=0.706 mhit=0.141 mavg=1.168 mvar=0.041
+jump DLFUCache(size=100, msize=50, T=8.0): gets=10000 hit=0.257 avg=2.134 var=0.394 mhit=0.090 mavg=1.022 mvar=0.005
+mixed DLFUCache(size=100, msize=50, T=8.0): gets=10000 hit=0.396 avg=2.911 var=1.036 mhit=0.101 mavg=1.108 mvar=0.039
+expo DLFUCache(size=100, msize=100, T=8.0): gets=10000 hit=0.456 avg=4.189 var=0.960 mhit=0.227 mavg=1.650 mvar=0.425
+walk DLFUCache(size=100, msize=100, T=8.0): gets=10000 hit=0.220 avg=2.778 var=0.907 mhit=0.209 mavg=1.223 mvar=0.080
+jump DLFUCache(size=100, msize=100, T=8.0): gets=10000 hit=0.290 avg=2.499 var=0.417 mhit=0.156 mavg=1.162 mvar=0.050
+mixed DLFUCache(size=100, msize=100, T=8.0): gets=10000 hit=0.403 avg=2.995 var=0.958 mhit=0.152 mavg=1.196 mvar=0.096
+expo DLFUCache(size=100, msize=200, T=8.0): gets=10000 hit=0.452 avg=4.230 var=0.910 mhit=0.351 mavg=1.469 mvar=0.486
+walk DLFUCache(size=100, msize=200, T=8.0): gets=10000 hit=0.234 avg=3.044 var=0.894 mhit=0.338 mavg=1.182 mvar=0.124
+jump DLFUCache(size=100, msize=200, T=8.0): gets=10000 hit=0.314 avg=2.834 var=0.306 mhit=0.297 mavg=1.317 mvar=0.152
+mixed DLFUCache(size=100, msize=200, T=8.0): gets=10000 hit=0.405 avg=3.136 var=0.843 mhit=0.222 mavg=1.133 mvar=0.135
+expo DLFUCache(size=100, msize=0, T=16.0): gets=10000 hit=0.429 avg=6.814 var=8.218 mhit=0.000 mavg=  nan mvar=  nan
+walk DLFUCache(size=100, msize=0, T=16.0): gets=10000 hit=0.120 avg=2.259 var=1.842 mhit=0.000 mavg=  nan mvar=  nan
+jump DLFUCache(size=100, msize=0, T=16.0): gets=10000 hit=0.157 avg=2.387 var=1.887 mhit=0.000 mavg=  nan mvar=  nan
+mixed DLFUCache(size=100, msize=0, T=16.0): gets=10000 hit=0.333 avg=4.941 var=4.605 mhit=0.000 mavg=  nan mvar=  nan
+expo DLFUCache(size=100, msize=50, T=16.0): gets=10000 hit=0.466 avg=7.920 var=3.800 mhit=0.113 mavg=3.165 mvar=1.499
+walk DLFUCache(size=100, msize=50, T=16.0): gets=10000 hit=0.121 avg=2.969 var=1.906 mhit=0.064 mavg=1.190 mvar=0.019
+jump DLFUCache(size=100, msize=50, T=16.0): gets=10000 hit=0.179 avg=2.984 var=1.532 mhit=0.053 mavg=1.218 mvar=0.040
+mixed DLFUCache(size=100, msize=50, T=16.0): gets=10000 hit=0.368 avg=5.879 var=3.032 mhit=0.100 mavg=2.516 mvar=0.467
+expo DLFUCache(size=100, msize=100, T=16.0): gets=10000 hit=0.466 avg=8.070 var=3.361 mhit=0.231 mavg=3.451 mvar=2.112
+walk DLFUCache(size=100, msize=100, T=16.0): gets=10000 hit=0.132 avg=3.464 var=1.840 mhit=0.118 mavg=1.402 mvar=0.098
+jump DLFUCache(size=100, msize=100, T=16.0): gets=10000 hit=0.192 avg=3.294 var=1.361 mhit=0.110 mavg=1.404 mvar=0.099
+mixed DLFUCache(size=100, msize=100, T=16.0): gets=10000 hit=0.378 avg=5.994 var=2.769 mhit=0.157 mavg=2.416 mvar=0.806
+expo DLFUCache(size=100, msize=200, T=16.0): gets=10000 hit=0.466 avg=8.107 var=3.267 mhit=0.352 mavg=2.802 mvar=2.449
+walk DLFUCache(size=100, msize=200, T=16.0): gets=10000 hit=0.143 avg=3.886 var=1.565 mhit=0.241 mavg=1.569 mvar=0.175
+jump DLFUCache(size=100, msize=200, T=16.0): gets=10000 hit=0.224 avg=3.908 var=1.276 mhit=0.218 mavg=1.576 mvar=0.246
+mixed DLFUCache(size=100, msize=200, T=16.0): gets=10000 hit=0.387 avg=6.075 var=2.572 mhit=0.228 mavg=2.105 mvar=1.024
+expo DLFUCache(size=100, msize=0, T=inf): gets=10000 hit=0.322 avg=33.210 var=297.806 mhit=0.000 mavg=  nan mvar=  nan
+walk DLFUCache(size=100, msize=0, T=inf): gets=10000 hit=0.023 avg=35.500 var=249.870 mhit=0.000 mavg=  nan mvar=  nan
+jump DLFUCache(size=100, msize=0, T=inf): gets=10000 hit=0.078 avg=43.260 var=302.912 mhit=0.000 mavg=  nan mvar=  nan
+mixed DLFUCache(size=100, msize=0, T=inf): gets=10000 hit=0.293 avg=72.520 var=1023.170 mhit=0.000 mavg=  nan mvar=  nan
+expo DLFUCache(size=100, msize=50, T=inf): gets=10000 hit=0.406 avg=43.190 var=225.614 mhit=0.074 mavg=12.580 mvar=23.564
+walk DLFUCache(size=100, msize=50, T=inf): gets=10000 hit=0.011 avg=44.370 var=225.473 mhit=0.029 mavg=18.300 mvar=15.250
+jump DLFUCache(size=100, msize=50, T=inf): gets=10000 hit=0.085 avg=52.920 var=293.674 mhit=0.038 mavg=25.800 mvar=15.000
+mixed DLFUCache(size=100, msize=50, T=inf): gets=10000 hit=0.374 avg=90.590 var=777.702 mhit=0.053 mavg=35.940 mvar=68.136
+expo DLFUCache(size=100, msize=100, T=inf): gets=10000 hit=0.428 avg=45.680 var=169.958 mhit=0.136 mavg=12.630 mvar=46.973
+walk DLFUCache(size=100, msize=100, T=inf): gets=10000 hit=0.009 avg=46.620 var=176.196 mhit=0.059 mavg=18.550 mvar=26.027
+jump DLFUCache(size=100, msize=100, T=inf): gets=10000 hit=0.086 avg=55.300 var=242.290 mhit=0.076 mavg=26.110 mvar=31.838
+mixed DLFUCache(size=100, msize=100, T=inf): gets=10000 hit=0.405 avg=96.050 var=592.228 mhit=0.111 mavg=36.970 mvar=147.469
+expo DLFUCache(size=100, msize=200, T=inf): gets=10000 hit=0.470 avg=50.580 var=144.704 mhit=0.293 mavg=14.340 mvar=89.494
+walk DLFUCache(size=100, msize=200, T=inf): gets=10000 hit=0.010 avg=51.590 var=152.922 mhit=0.115 mavg=20.055 mvar=48.752
+jump DLFUCache(size=100, msize=200, T=inf): gets=10000 hit=0.086 avg=60.270 var=209.277 mhit=0.148 mavg=27.415 mvar=52.163
+mixed DLFUCache(size=100, msize=200, T=inf): gets=10000 hit=0.421 avg=102.800 var=548.120 mhit=0.244 mavg=39.430 mvar=234.185

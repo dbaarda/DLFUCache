@@ -256,7 +256,7 @@ class DLFUCache(collections.MutableMapping):
     return 0.0
 
   def __repr__(self):
-    return "%s(size=%s, msize=%s, T=%5.3f)" % (
+    return "%s(size=%s, msize=%s, T=%3.1f)" % (
         self.__class__.__name__, self.size, self.msize, self.T)
 
   def __str__(self):

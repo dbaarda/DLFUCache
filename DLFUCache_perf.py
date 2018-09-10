@@ -97,7 +97,6 @@ if __name__ == '__main__':
   C = 100 * N
   for T in (0.0, 1.0, 2.0, 4.0, 8.0, 16.0, inf):
     for M in (0, N/2, N, 2*N):
-      #print "T = %f, msize = %s" % (T, M)
       cache = DLFUCache(N, M, T=T)
       runtest("expo", cache, expo(N), C)
       runtest("walk", cache, walk(N/6.0), C)

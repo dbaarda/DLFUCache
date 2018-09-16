@@ -14,7 +14,6 @@ Requires:
 """
 import collections
 from PQueue import PQueueHeapq, PQueueLRU
-from PIDController import PIDController, LowPassFilter
 
 # Infinity, used to set T decay timeconstant for no decay.
 inf = float('inf')
@@ -43,6 +42,16 @@ class DLFUCache(collections.MutableMapping):
     mcount_sum: the sum of all extra metadata counts.
     count_sum2: The sum of the square of all cache entry counts.
     mcount_sum2: the sum of the square of all extra metadata counts.
+
+  Properties:
+    count_min: The minimum count value for cache entries.
+    count_avg: The average of count values for cache entries.
+    count_var: The variance of count values for cache entries.
+    hit_rate: The hit_rate for cache entries.
+    mcount_min: The minimum count value for extra metadata.
+    mcount_avg: The average of count values for extra metadata.
+    mcount_var: The variance of count values for extra metadata.
+    mhit_rate: The hit_rate for extra metadata.
   """
 
   def __init__(self, size, msize=None, T=4.0):
@@ -50,10 +59,7 @@ class DLFUCache(collections.MutableMapping):
       msize = size
     self.size = size
     self.msize = msize
-    self.data = {}
-    self.C = 1.0
     self.T = T
-    T *= size
     if T == 0.0:
       # Behave like LRU with no exponential decay of counts.
       self.M = 1.0
@@ -64,15 +70,23 @@ class DLFUCache(collections.MutableMapping):
       PQueue = PQueueHeapq
     else:
       # Behave like DLFU with exponentail decay of counts.
-      self.M = (T + 1.0) / T
+      self.M = (T*size + 1.0) / (T*size)
       PQueue = PQueueHeapq
+    self.data = {}
     self.cqueue = PQueue()
     self.mqueue = PQueue()
-    self.reset_stats()
+    self.clear()
+
+  def clear(self):
+    self.data.clear()
+    self.cqueue.clear()
+    self.mqueue.clear()
+    self.C = 1.0
     self.count_sum = 0.0
     self.mcount_sum = 0.0
     self.count_sum2 = 0.0
     self.mcount_sum2 = 0.0
+    self.reset_stats()
 
   def reset_stats(self):
     self.get_count = 0
@@ -263,40 +277,3 @@ class DLFUCache(collections.MutableMapping):
     return "%r: gets=%i hit=%5.3f avg=%5.3f var=%5.3f mhit=%5.3f mavg=%5.3f mvar=%5.3f" % (
         self, self.get_count, self.hit_rate, self.count_avg, self.count_var,
         self.mhit_rate, self.mcount_avg, self.mcount_var)
-
-
-class ADLFUCache(DLFUCache):
-  """An Adaptive Decaying LFU Cache."""
-
-  def __init__(self, size, msize=None):
-    super(ADLFUCache, self).__init__(size, msize, 8.0)
-    self.lpf = LowPassFilter(size/8.0)
-    self.pid = PIDController.ZiglerNichols(1.0, size/2.0)
-    self.dt = 0.0
-
-  def _setT(self, T):
-    #self.C *= self.T / T
-    self.T = T
-    self.M = (T*self.size + 1.0) / (T*self.size)
-
-  def __getitem__(self, key):
-    self.dt+=1.0
-    if key in self.cqueue:
-      # Get best expected average count (when access patterns match counts).
-      mean2 = self.count_sum2 / (self.count_sum * self.C)
-      # Get the average count (evenly distributed access patterns).
-      mean = self.count_avg
-      # set the target 75% of the way between mean and mean2.
-      target = 0.75 * mean + 0.25 * mean2
-      # Get the low-pass filtered average count.
-      count = self.lpf.update(self.getcount(key), self.dt)
-      # Note 0 <= count <= T*size, 0 <= mean <= T.
-      # This gives error in the range of almost -1 to 1.
-      error = (count - target)/(count + target + 0.001)
-      control = self.pid.update(error, self.dt)
-      # Transform the pid control output into 0.0 < T < inf and T=8.0 when control=0.0.
-      T = 4.0 * (1.1 + control) / (1.1 - control)
-      self._setT(T)
-      self.dt = 0.0
-      #print '%6d' % key, self, self.lpf, mean2, self.pid
-    ret = super(ADLFUCache, self).__getitem__(key)

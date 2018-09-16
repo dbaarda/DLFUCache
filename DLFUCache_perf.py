@@ -86,10 +86,10 @@ def mixed(size):
 def runtest(name, cache, gen, count=1000):
   """Do count accesses using an access generator."""
   random.seed(7)
+  cache.clear()
   for key in itertools.islice(gen, count):
     get(cache, key)
   print name, cache
-  cache.reset_stats()
 
 
 if __name__ == '__main__':
@@ -97,7 +97,7 @@ if __name__ == '__main__':
   C = 100 * N
   for T in (0.0, 1.0, 2.0, 4.0, 8.0, 16.0, inf):
     for M in (0, N/2, N, 2*N):
-      cache = DLFUCache(N, M, T=T)
+      cache = DLFUCache(N, M, T)
       runtest("expo", cache, expo(N), C)
       runtest("walk", cache, walk(N/6.0), C)
       runtest("jump", cache, jump(N, 16*N), C)

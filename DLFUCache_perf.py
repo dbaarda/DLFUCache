@@ -47,9 +47,10 @@ def expo(median, offset=0):
     yield int(random.expovariate(lambd) + offset)
 
 
-def walk(sigma, start=0, minv=0, maxv=MAXK):
+def walk(variance, start=0, minv=0, maxv=MAXK):
   """Stochastic "gaussian walk" access generator."""
   mu = start
+  sigma = variance**0.5
   while True:
     mu = reflect(random.gauss(mu, sigma), minv, maxv)
     yield int(mu)
@@ -77,8 +78,8 @@ def jump(median, duration, start=0.0, step=2.0):
 def mixed(size):
   """A nasty mixture of access generators."""
   g1 = expo(size)
-  g2 = jump(size, 16*size)
-  g3 = walk(size/6.0)
+  g2 = jump(size, 20*size)
+  g3 = walk(2*size)
   g4 = scan()
   return cycle(g1, g2, g3, g4)
 
@@ -93,12 +94,12 @@ def runtest(name, cache, gen, count=1000):
 
 
 if __name__ == '__main__':
-  N = 100
+  N = 1000
   C = 100 * N
   for T in (0.0, 1.0, 2.0, 4.0, 8.0, 16.0, inf):
     for M in (0, N/2, N, 2*N):
       cache = DLFUCache(N, M, T)
       runtest("expo", cache, expo(N), C)
-      runtest("walk", cache, walk(N/6.0), C)
-      runtest("jump", cache, jump(N, 16*N), C)
+      runtest("walk", cache, walk(2*N), C)
+      runtest("jump", cache, jump(N, 20*N), C)
       runtest("mixed", cache, mixed(N/2), C)

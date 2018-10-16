@@ -212,13 +212,18 @@ class PQueueLRU(PQueueDList):
 
 
 class CDList(collections.Container, collections.Iterable, collections.Sized):
-  """A doubly linked list with cursor for sorted inserts."""
+  """A doubly linked list with cursor for sorted inserts.
+
+  Each dlist entry is a list of [value, key, next, prev]. The dlist is
+  implemented as a circular dlist with a sentinel entry that marks the
+  beginning/end of the list.
+  """
 
   def __init__(self, *args, **kwargs):
     self.count = 0
-    self.next = None
-    self.last = None
-    self.cursor = None
+    # Create a sentinel entry for the start/end of the circular dlist.
+    s = self.newentry(None, None)
+    s[2] = s[3] = self.sentinel = self.cursor = s
     for e in sorted(self.newentry(k,v) for k,v in dict(*args, **kwargs).iteritems()):
       self.insert(e)
 
@@ -232,14 +237,14 @@ class CDList(collections.Container, collections.Iterable, collections.Sized):
     return self.count
 
   def __iter__(self):
-    next = self.next
-    while next:
+    next = self.sentinel[2]
+    while next is not self.sentinel:
       yield next
       next = next[2]
 
   def __reversed__(self):
-    prev = self.last
-    while prev:
+    prev = self.sentinel[3]
+    while prev is not self.sentinel:
       yield prev
       prev = prev[3]
 
@@ -248,22 +253,12 @@ class CDList(collections.Container, collections.Iterable, collections.Sized):
 
   def insert(self, entry, pos=None):
     """Insert entry into dlist before pos."""
-    # Get the entires after/before the insertion point.
-    next = pos
-    if pos:
-      prev = pos[3]
-    else:
-      prev = self.last
-    # Update the entry before.
-    if prev:
-      prev[2] = entry
-    else:
-      self.next = entry
-    # Update the entry after.
-    if next:
-      next[3] = entry
-    else:
-      self.last = entry
+    # Set pos to the sentinal if unspecified.
+    pos = pos or self.sentinel
+    # Get the entries after/before the insertion point.
+    next, prev = pos, pos[3]
+    # Update the entry before and after.
+    prev[2] = next[3] = entry
     # Update the entry and count.
     entry[2], entry[3] = next, prev
     self.count += 1
@@ -274,39 +269,31 @@ class CDList(collections.Container, collections.Iterable, collections.Sized):
     # Update the cursor.
     if entry is self.cursor:
       self.cursor = next
-    # Update the entry before.
-    if prev:
-      prev[2] = next
-    else:
-      self.next = next
-    # Update the entry after.
-    if next:
-      next[3] = prev
-    else:
-      self.last = prev
+    # Update the entry before and after.
+    prev[2], next[3] = next, prev
     # Update the entry and count.
     entry[2] = entry[3] = None
     self.count -= 1
 
   def insort(self, entry, pos=None):
     """Insert entry into sorted dlist, with optional pos hint."""
-    # Scan from the end if pos not specified.
-    pos = pos or self.last
+    # Set sentinel equal to entry to stop scans at the sentinel.
+    self.sentinel[0] = entry[0]
+    # Scan from the sentinel if pos not specified.
+    pos = pos or self.sentinel
     # Scan backwards from pos for a smaller or equal entry.
-    while pos and pos[0] > entry[0]:
+    pos = pos[3]
+    while pos[0] > entry[0]:
       pos = pos[3]
-    # Adjust pointer to insertion point after smaller or equal entry.
-    if pos:
-      pos = pos[2]
-    else:
-      pos = self.next
     # Scan forwards from pos for greater or equal entry.
-    while pos and pos[0] < entry[0]:
+    pos = pos[2]
+    while pos[0] < entry[0]:
       pos = pos[2]
+    # Insert before greater or equal entry.
     self.insert(entry, pos)
 
   def peek(self, entry=None):
-    entry = entry or self.next
+    entry = entry or self.sentinel[2]
     return entry[1], entry[0]
 
   def push(self, key, value):
@@ -316,8 +303,8 @@ class CDList(collections.Container, collections.Iterable, collections.Sized):
     return entry
 
   def pull(self, entry=None):
-    entry = entry or self.next
-    if not entry:
+    entry = entry or self.sentinel[2]
+    if entry is self.sentinel:
       raise IndexError('pull() from empty DList')
     self.remove(entry)
     return entry[1], entry[0]

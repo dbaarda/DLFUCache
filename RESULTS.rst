@@ -55,12 +55,12 @@ Walk
 
 This is a random stochastic walk using a normal distribution. This
 represents the idealistic case of a task wandering through data in a
-way where locality is all. The walk "reflects back" from the min and
-max values for the entry range (default: minv=0, maxv=MAXK), which
-does mean it has a slight preference to "hang around" those limits.
+way where locality is the only thing that matters. The walk "wraps
+around" past the min and max values for the entry range (default:
+minv=0, maxv=MAXK).
 
 The settings are the variance and an optional start value (default:
-start=0). The variance affects how fast/far the walk will wander.
+start=MAXK/2). The variance affects how fast/far the walk will wander.
 There is a one-sigma (68%) chance that it wanders less than
 sqrt(variance*N) distance every N iterations. So setting the variance
 to the cache size means there is a one-sigma chance (68%) it wanders
@@ -79,8 +79,8 @@ different tasks with different working sets sequentially.
 
 The settings are the expo distribution's median, duration between
 jumps, and optional start and step median multipliers for the jumping
-expo distribution's offset (default:start=0.0, step=2.0). The default
-step means that each jump has only a small overlap with the previous
+expo distribution's offset (default:start=0.0, step=4.0). The default
+step means that each jump has very little overlap with the previous
 jump at the tail end of its distribution.
 
 This access pattern should favour a mixture of LFU and LRU, with LFU
@@ -95,7 +95,9 @@ uncachable, and is mainly of interest for testing how badly caching
 algorithms are hurt by this access pattern.
 
 There are optional settings for the start and step (default: start=0,
-step=1).
+step=1), and it will wrap around between min and max values (default:
+minv=0, maxv=MAXK). The defaults mean it will not wrap within the test
+timescales used.
 
 This access pattern is known to cause problems for LRU, and LFU does a
 much better job of ignoring these accessess.

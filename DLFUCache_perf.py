@@ -11,6 +11,7 @@ import itertools
 import math
 import random
 from DLFUCache import *
+from ARCCache import *
 
 
 # Default maximum cache key value.
@@ -25,12 +26,12 @@ def get(cache, key):
     cache[key] = key
 
 
-def reflect(v, minv, maxv):
-  "Reflect a value back between limits min <= v < max."""
+def wrap(v, minv, maxv):
+  "Wrap a value around between limits min <= v < max."""
   if v < minv:
-    return 2*minv - v
+    return v + (maxv - minv)
   if v >= maxv:
-    return 2*maxv - v - 2
+    return v - (maxv - minv)
   return v
 
 
@@ -47,12 +48,12 @@ def expo(median, offset=0):
     yield int(random.expovariate(lambd) + offset)
 
 
-def walk(variance, start=0, minv=0, maxv=MAXK):
+def walk(variance, start=MAXK/2, minv=0, maxv=MAXK):
   """Stochastic "gaussian walk" access generator."""
   mu = start
   sigma = variance**0.5
   while True:
-    mu = reflect(random.gauss(mu, sigma), minv, maxv)
+    mu = wrap(random.gauss(mu, sigma), minv, maxv)
     yield int(mu)
 
 
@@ -62,11 +63,11 @@ def scan(start=0, step=1, minv=0, maxv=MAXK):
   while True:
     yield int(value)
     value += step
-    if value > maxv:
-      value = minv
+    if value >= maxv:
+      value -= maxv - minv
 
 
-def jump(median, duration, start=0.0, step=2.0):
+def jump(median, duration, start=0.0, step=4.0):
   """Jumping expo access generator."""
   offset = start*median
   while True:
@@ -78,7 +79,7 @@ def jump(median, duration, start=0.0, step=2.0):
 def mixed(size):
   """A nasty mixture of access generators."""
   g1 = expo(size)
-  g2 = jump(size, 20*size)
+  g2 = jump(size, 20*size, 4*size)
   g3 = walk(2*size)
   g4 = scan()
   return cycle(g1, g2, g3, g4)
@@ -97,7 +98,7 @@ def alltests(cache, N, C):
   runtest("expo", cache, expo(N), C)
   runtest("jump", cache, jump(N, 20*N), C)
   runtest("walk", cache, walk(2*N), C)
-  runtest("mixed", cache, mixed(N/2), C)
+  runtest("mixed", cache, mixed(N/4), C)
 
 
 if __name__ == '__main__':
@@ -107,3 +108,5 @@ if __name__ == '__main__':
     for M in (0, N/2, N, 2*N):
       cache = DLFUCache(N, M, T)
       alltests(cache, N, C)
+  cache = ARCCache(N)
+  alltests(cache, N, C)

@@ -240,7 +240,7 @@ class DLFUCache(collections.MutableMapping):
   def __setitem__(self, key, value):
     self.set_count += 1
     # Bypass the cache if the count is too low and not running as LRU.
-    if not (self.count_min <= (self.getcount(key) or 1.0) or self.T == 0.0):
+    if self.T != 0.0 and self.count_min > (self.getcount(key) or 1.0):
       return
     if key in self.mqueue:
       # Move the entry from the mqueue to the cqueue.

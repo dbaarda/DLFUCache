@@ -67,9 +67,10 @@ def scan(start=0, step=1, minv=0, maxv=MAXK):
       value -= maxv - minv
 
 
-def jump(median, duration, start=0.0, step=4.0):
+def jump(median, interval=16, start=0.0, step=4.0):
   """Jumping expo access generator."""
-  offset = start*median
+  offset = start * median
+  duration = interval * median
   while True:
     for i in itertools.islice(expo(median, offset), duration):
       yield i
@@ -79,7 +80,7 @@ def jump(median, duration, start=0.0, step=4.0):
 def mixed(size):
   """A nasty mixture of access generators."""
   g1 = expo(size)
-  g2 = jump(size, 20*size, 4*size)
+  g2 = jump(size, start=4*size)
   g3 = walk(2*size)
   g4 = scan()
   return cycle(g1, g2, g3, g4)
@@ -92,13 +93,15 @@ def runtest(name, cache, gen, count=1000):
   for key in itertools.islice(gen, count):
     get(cache, key)
   print name, cache
+  return cache.hit_rate
 
 
 def alltests(cache, N, C):
-  runtest("expo", cache, expo(N), C)
-  runtest("jump", cache, jump(N, 20*N), C)
-  runtest("walk", cache, walk(2*N), C)
-  runtest("mixed", cache, mixed(N/4), C)
+  e = runtest("expo", cache, expo(N), C)
+  j = runtest("jump", cache, jump(N), C)
+  w = runtest("walk", cache, walk(2*N), C)
+  m = runtest("mixed", cache, mixed(N/4), C)
+  return e,j,w,m
 
 
 if __name__ == '__main__':

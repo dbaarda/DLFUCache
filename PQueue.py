@@ -9,9 +9,8 @@ class PQueueVect(collections.MutableMapping):
   __marker = object()
 
   def __init__(self, *args, **kwargs):
-    self.data = dict(*args, **kwargs)
-    self.queue = self._queue(self.data)
-    self.data.update((e[1], e) for e in self.queue)
+    self.queue = self._queue(*args, **kwargs)
+    self.data = dict((e[1], e) for e in self.queue)
 
   def __getitem__(self, key):
     return self.data[key][0]
@@ -133,8 +132,8 @@ class PQueueDeque(PQueueVect):
     return entry[1], entry[0]
 
 
-class PQueueHeapq(PQueueVect):
-  """A PQueue implemented using Python's heapq."""
+class PQueueHeapqD(PQueueVect):
+  """A PQueue implemented using Python's heapq with deletion markers."""
 
   __deleted = object()
 
@@ -174,6 +173,106 @@ class PQueueHeapq(PQueueVect):
       # Suck out any deleted items.
       self._peek()
       oldvalue, oldkey = heapq.heapreplace(self.queue, entry)
+    return entry, oldkey, oldvalue
+
+
+# These are basic heap functions that assume entries are in the form
+# [key, value, index], where index is the entry's index in the heap.
+
+def _shiftup(heap, entry):
+  """Shift an entry up into the right position."""
+  pos = entry[2]
+  # Shift the parents down until we find the right position.
+  while pos > 0:
+    parentpos = (pos - 1) >> 1
+    parent = heap[parentpos]
+    if entry[0] >= parent[0]:
+      break
+    # move the parent down.
+    parent[2] = pos
+    heap[pos] = parent
+    # Go up to the next parent.
+    pos = parentpos
+  # The node at pos is empty now, Put entry there.
+  heap[pos] = entry
+  entry[2] = pos
+
+def _shiftdn(heap, entry):
+  """Shift an entry down into the right position."""
+  pos = entry[2]
+  n = len(heap)
+  # Shift the smaller child up until we find the right position.
+  childpos = 2 * pos + 1  # leftmost child position
+  while childpos < n:
+    # Set childpos to index of smaller child.
+    rightpos = childpos + 1
+    if rightpos < n and heap[childpos][0] > heap[rightpos][0]:
+      childpos = rightpos
+    child = heap[childpos]
+    if entry[0] <= child[0]:
+      break
+    # Move the smaller child up.
+    child[2] = pos
+    heap[pos]= child
+    # Go down to the next child.
+    pos = childpos
+    childpos = 2 * pos + 1
+  # The node at pos is empty now, put entry there.
+  entry[2] = pos
+  heap[pos] = entry
+
+
+class PQueueHeapq(PQueueVect):
+  """A PQueue implemented using a binheap with entries containing their index."""
+
+  def _queue(self, *args, **kwargs):
+    """_queue(*args, **kwargs) -> queue."""
+    heap = [[v, k, i] for i,(k,v) in enumerate(dict(*args, **kwargs).iteritems())]
+    for i in reversed(xrange(len(heap)//2)):
+      _shiftdn(heap, heap[i])
+    return heap
+
+  def _peek(self, entry=None):
+    """_peek([entry]) -> key, value."""
+    value, key, _ = entry or self.queue[0]
+    return key, value
+
+  def _push(self, key, value):
+    """_push(key, value) -> entry."""
+    heap = self.queue
+    # Put the new entry at the end and shift it up.
+    entry = [value, key, len(heap)]
+    heap.append(entry)
+    _shiftup(heap, entry)
+    return entry
+
+  def _pull(self, entry=None):
+    """_pull([entry]) -> key, value."""
+    heap = self.queue
+    entry = entry or heap[0]
+    last = heap.pop()
+    value, key, pos = entry
+    if last is not entry:
+      # Put last at the entry's position and shift it into place.
+      last[2] = pos
+      heap[pos] = last
+      if value < last[0]:
+        _shiftdn(heap, last)
+      else:
+        _shiftup(heap, last)
+    return key, value
+
+  def _swap(self, key, value, oldentry=None):
+    """_swap(key, value, [oldentry]) -> entry, oldkey, oldvalue."""
+    heap = self.queue
+    entry = oldentry or heap[0]
+    oldvalue, oldkey, _ = entry
+    # Set the entry and shift it into place.
+    entry[0], entry[1] = value, key
+    if oldvalue < value:
+      _shiftdn(heap, entry)
+    else:
+      _shiftup(heap, entry)
     return entry, oldkey, oldvalue
 
 

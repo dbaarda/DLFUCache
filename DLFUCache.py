@@ -274,6 +274,6 @@ class DLFUCache(collections.MutableMapping):
         self.__class__.__name__, self.size, self.msize, self.T)
 
   def __str__(self):
-    return "%r: gets=%i hit=%5.3f avg=%5.3f var=%5.3f mhit=%5.3f mavg=%5.3f mvar=%5.3f" % (
-        self, self.get_count, self.hit_rate, self.count_avg, self.count_var,
-        self.mhit_rate, self.mcount_avg, self.mcount_var)
+    return "%r: gets=%i hit=%5.3f avg=%5.3f var=%5.3f min=%5.3f mhit=%5.3f mavg=%5.3f mvar=%5.3f mmin=%5.3f" % (
+        self, self.get_count, self.hit_rate, self.count_avg, self.count_var, self.count_min,
+        self.mhit_rate, self.mcount_avg, self.mcount_var, self.mcount_min)

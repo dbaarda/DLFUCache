@@ -105,8 +105,8 @@ def alltests(cache, N, C):
 
 
 if __name__ == '__main__':
-  N = 1000
-  C = 100 * N
+  N = 1024
+  C = 128 * N
   for T in (0.0, 1.0, 2.0, 4.0, 8.0, 16.0, inf):
     for M in (0, N/2, N, 2*N):
       cache = DLFUCache(N, M, T)

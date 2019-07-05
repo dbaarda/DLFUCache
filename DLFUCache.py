@@ -52,6 +52,13 @@ class DLFUCache(collections.MutableMapping):
     mcount_avg: The average of count values for extra metadata.
     mcount_var: The variance of count values for extra metadata.
     mhit_rate: The hit_rate for extra metadata.
+    thit_count: The total count of cache+metadata hits.
+    tsize: The total number of entries in the cache+metadata.
+    tcount_sum: The sum of all cache+metatdata entry counts.
+    tcount_sum2: The sum of the square of all cache+metadata entry counts.
+    tcount_avg: The average of count values for cache+metadata.
+    tcount_var: The variance of count values for cache+metadata.
+    thit_rate: The hit_rate for cache+metadata.
   """
 
   def __init__(self, size, msize=None, T=4.0):
@@ -96,6 +103,26 @@ class DLFUCache(collections.MutableMapping):
     self.mhit_count = 0
 
   @property
+  def tsize(self):
+    """The total number of entries in cache+metadata."""
+    return self.size + self.msize
+
+  @property
+  def thit_count(self):
+    """The total number of cache+metadata hits."""
+    return self.hit_count + self.mhit_count
+
+  @property
+  def tcount_sum(self):
+    """The sum of all cache+metadata entry counts."""
+    return self.count_sum + self.mcount_sum
+
+  @property
+  def tcount_sum2(self):
+    """The sum of the squares of all cache+metadata entry counts."""
+    return self.count_sum2 + self.mcount_sum2
+
+  @property
   def count_min(self):
     """The cache contents minimum access count."""
     if self.size == len(self.cqueue):
@@ -122,6 +149,11 @@ class DLFUCache(collections.MutableMapping):
     return nan
 
   @property
+  def tcount_avg(self):
+    """The total cache+metadata access count average."""
+    return self.tcount_sum / (self.C * self.tsize)
+
+  @property
   def count_var(self):
     """The cache contents access count variance."""
     return self.count_sum2 / (self.C**2 * self.size) - self.count_avg**2
@@ -132,6 +164,11 @@ class DLFUCache(collections.MutableMapping):
     if 0 < self.msize:
       return self.mcount_sum2 / (self.C**2 * self.msize) - self.mcount_avg**2
     return nan
+
+  @property
+  def tcount_var(self):
+    """The total cache+metadata access count variance."""
+    return self.tcount_sum2 / (self.C**2 * self.tsize) - self.tcount_avg**2
 
   @property
   def hit_rate(self):
@@ -145,6 +182,13 @@ class DLFUCache(collections.MutableMapping):
     """The extra metadata hit rate."""
     if 0 < self.get_count:
       return float(self.mhit_count) / self.get_count
+    return nan
+
+  @property
+  def thit_rate(self):
+    """The total cache+metadata hit rate."""
+    if 0 < self.get_count:
+      return float(self.thit_count) / self.get_count
     return nan
 
   def _inccqueue(self, key):

@@ -267,7 +267,6 @@ class DLFUCache(collections.MutableMapping):
 
   def __getitem__(self, key):
     self.get_count += 1
-    self._decayall()
     if key in self.cqueue:
       # Cache hit.
       self.hit_count += 1
@@ -279,6 +278,7 @@ class DLFUCache(collections.MutableMapping):
     elif self.mcount_min <= 1.0 or self.T == 0.0:
       # Cache miss.
       self._setmqueue(key, self.C)
+    self._decayall()
     return self.data[key]
 
   def __setitem__(self, key, value):

@@ -47,10 +47,12 @@ class DLFUCache(abc.MutableMapping):
     count_min: The minimum count value for cache entries.
     count_avg: The average of count values for cache entries.
     count_var: The variance of count values for cache entries.
+    count_dev: The stddev of count values for cache entries.
     hit_rate: The hit_rate for cache entries.
     mcount_min: The minimum count value for extra metadata.
     mcount_avg: The average of count values for extra metadata.
     mcount_var: The variance of count values for extra metadata.
+    mcount_dev: The stddev of count values for extra metadata.
     mhit_rate: The hit_rate for extra metadata.
     thit_count: The total count of cache+metadata hits.
     tsize: The total number of entries in the cache+metadata.
@@ -58,6 +60,7 @@ class DLFUCache(abc.MutableMapping):
     tcount_sum2: The sum of the square of all cache+metadata entry counts.
     tcount_avg: The average of count values for cache+metadata.
     tcount_var: The variance of count values for cache+metadata.
+    tcount_dev: The stddev of count values for cache+metadata.
     thit_rate: The hit_rate for cache+metadata.
   """
 
@@ -169,6 +172,21 @@ class DLFUCache(abc.MutableMapping):
   def tcount_var(self):
     """The total cache+metadata access count variance."""
     return self.tcount_sum2 / (self.C**2 * self.tsize) - self.tcount_avg**2
+
+  @property
+  def count_dev(self):
+    """The cache contents access count stddev."""
+    return self.count_var**0.5
+
+  @property
+  def mcount_dev(self):
+    """The extra metadata access count stddev."""
+    return self.mcount_var**0.5
+
+  @property
+  def tcount_dev(self):
+    """The total cache+metadata access count stddev."""
+    return self.tcount_var**0.5
 
   @property
   def hit_rate(self):

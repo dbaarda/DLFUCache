@@ -40,5 +40,5 @@ class ADLFUCache(DLFUCache):
     # Transform the pid control output into 0.0 < T < inf and T=8.0 when control=0.0.
     T = 2.0 * (1.1 + control) / (1.1 - control)
     self._setT(T)
-    #print "%6d" % key, self, fast, slow, self.pid
+    #print("%6d" % key, self, fast, slow, self.pid)
     ret = super(ADLFUCache, self).__getitem__(key)

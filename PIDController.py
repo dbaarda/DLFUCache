@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 def limit(value, minValue, maxValue):
   # limit a value between min and max
@@ -204,11 +204,11 @@ if __name__ == '__main__':
   mass = 10.0
   position = 0.0
   velocity = 0.0
-  print "%2d %6.3f %s" % (0, position, controller)
+  print("%2d %6.3f %s" % (0, position, controller))
   controller.reset(demand - position)
-  print "%2d %6.3f %s" % (0, position, controller)
-  for t in xrange(40):
+  print("%2d %6.3f %s" % (0, position, controller))
+  for t in range(40):
     velocity += force/mass
     position += velocity
     force = controller.update(demand - position, 1.0)
-    print "%2d %6.3f %s" % (t, position, controller)
+    print("%2d %6.3f %s" % (t, position, controller))

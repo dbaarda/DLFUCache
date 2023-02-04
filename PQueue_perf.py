@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/pypy3
 from timeit import timeit
 from PQueue import *
 
@@ -61,7 +61,7 @@ def testq(name, size=1024, count=1000):
   # meta cache performance.
   s = msetup % dict(Q=name, n=size, c=count)
   ts =  timeit('chit(i); mhit(i+1); chit(i+2); miss(i+3); i = (i + 1) % (n-4)', s, number=count)
-  print '%5d %-12s th=%6.3f tm=%6.3f t0=%6.3f tn=%6.3f tc=%6.3f ts=%6.3f' % (size, name, th, tm, t0, tn, tc, ts)
+  print('%5d %-12s th=%6.3f tm=%6.3f t0=%6.3f tn=%6.3f tc=%6.3f ts=%6.3f' % (size, name, th, tm, t0, tn, tc, ts))
 
 queues = 'Vect Deque HeapqD Heapq DList LRU'.split()
 
@@ -69,5 +69,5 @@ size = 1024
 while size <= NMax:
   for Q in ('PQueue%s' % q for q in queues):
     testq(Q, size, 2**14)
-  print
+  print()
   size *= 2

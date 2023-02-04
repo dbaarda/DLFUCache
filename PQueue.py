@@ -1,9 +1,10 @@
 import collections
 import heapq
 import bisect
+from collections import abc
 
 
-class PQueueVect(collections.MutableMapping):
+class PQueueVect(abc.MutableMapping):
   """A PQueue implemented using Python's list."""
 
   __marker = object()
@@ -17,7 +18,7 @@ class PQueueVect(collections.MutableMapping):
 
   def __setitem__(self, key, value):
     d = self.data
-    if d.has_key(key):
+    if key in d:
       entry, _, _ = self._swap(key, value, d[key])
     else:
       entry = self._push(key, value)
@@ -74,7 +75,7 @@ class PQueueVect(collections.MutableMapping):
 
   def _queue(self, *args, **kwargs):
     """_queue(*args, **kwargs) -> queue."""
-    return sorted([v, k] for k,v in dict(*args, **kwargs).iteritems())
+    return sorted([v, k] for k,v in dict(*args, **kwargs).items())
 
   def _peek(self, entry=None):
     """_peek([entry]) -> key, value."""
@@ -108,7 +109,7 @@ class PQueueDeque(PQueueVect):
 
   def _queue(self, *args, **kwargs):
     return collections.deque(
-        sorted([v, k] for k,v in dict(*args, **kwargs).iteritems()))
+        sorted([v, k] for k,v in dict(*args, **kwargs).items()))
 
   def _insert(self, i, e):
     q = self.queue
@@ -132,10 +133,25 @@ class PQueueDeque(PQueueVect):
     return entry[1], entry[0]
 
 
+class Deleted(object):
+  """A Class for deleted objects that compares less than anything.
+
+  We need this for "deleted" sentinel markers in pqueue entries to prevent
+  TypeError exceptions comparing entries with the same priority. It also
+  ensures deleted entries with the same priority float to the top where they
+  can be removed.
+  """
+  def __lt__(self, other):
+    return True
+
+  def __gt__(self, other):
+    return False
+
+
 class PQueueHeapqD(PQueueVect):
   """A PQueue implemented using Python's heapq with deletion markers."""
 
-  __deleted = object()
+  __deleted = Deleted()
 
   def _peek(self, entry=None):
     """_peek([entry]) -> key, value."""
@@ -227,8 +243,8 @@ class PQueueHeapq(PQueueVect):
 
   def _queue(self, *args, **kwargs):
     """_queue(*args, **kwargs) -> queue."""
-    heap = [[v, k, i] for i,(k,v) in enumerate(dict(*args, **kwargs).iteritems())]
-    for i in reversed(xrange(len(heap)//2)):
+    heap = [[v, k, i] for i,(k,v) in enumerate(dict(*args, **kwargs).items())]
+    for i in reversed(range(len(heap)//2)):
       _shiftdn(heap, heap[i])
     return heap
 
@@ -310,7 +326,7 @@ class PQueueLRU(PQueueDList):
     return entry
 
 
-class CDList(collections.Container, collections.Iterable, collections.Sized):
+class CDList(abc.Container, abc.Iterable, abc.Sized):
   """A doubly linked list with cursor for sorted inserts.
 
   Each dlist entry is a list of [value, key, next, prev]. The dlist is
@@ -323,7 +339,7 @@ class CDList(collections.Container, collections.Iterable, collections.Sized):
     # Create a sentinel entry for the start/end of the circular dlist.
     s = self.newentry(None, None)
     s[2] = s[3] = self.sentinel = self.cursor = s
-    for e in sorted(self.newentry(k,v) for k,v in dict(*args, **kwargs).iteritems()):
+    for e in sorted(self.newentry(k,v) for k,v in dict(*args, **kwargs).items()):
       self.insert(e)
 
   def __contains__(self, value):

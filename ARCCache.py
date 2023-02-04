@@ -9,9 +9,10 @@ Download: http://minkirri.apana.org.au/~abo/projects/DLFUCache/
 """
 import collections
 import itertools
+from collections import abc
 
 
-class ARCCache(collections.MutableMapping):
+class ARCCache(abc.MutableMapping):
   """ARC Cache
 
   This implements the ARC cache reference algorithm modified to be a
@@ -66,14 +67,14 @@ class ARCCache(collections.MutableMapping):
   def hit_rate(self):
     """The cache contents hit rate."""
     if 0 < self.get_count:
-      return float(self.hit_count) / self.get_count
+      return self.hit_count / self.get_count
     return nan
 
   @property
   def mhit_rate(self):
     """The extra metadata hit rate."""
     if 0 < self.get_count:
-      return float(self.mhit_count) / self.get_count
+      return self.mhit_count / self.get_count
     return nan
 
   def _replace(self, key):
@@ -112,14 +113,14 @@ class ARCCache(collections.MutableMapping):
     # A b1 hit, move to end of t2.
     elif key in self.b1:
       self.mhit_count += 1
-      self.p = min(self.size, self.p + max(len(self.b2) / len(self.b1), 1))
+      self.p = min(self.size, self.p + max(len(self.b2) // len(self.b1), 1))
       self._replace(key)
       self.b1.pop(key)
       self.t2[key] = value
     # A b2 hit, move to end of t2,
     elif key in self.b2:
       self.mhit_count += 1
-      self.p = max(0, self.p - max(len(self.b1) / len(self.b2), 1))
+      self.p = max(0, self.p - max(len(self.b1) // len(self.b2), 1))
       self._replace(key)
       self.b2.pop(key)
       self.t2[key] = value

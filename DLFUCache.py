@@ -12,7 +12,7 @@ Download: http://minkirri.apana.org.au/~abo/projects/DLFUCache/
 
 Requires:
 """
-import collections
+from collections import abc
 from PQueue import PQueueHeapq, PQueueLRU
 
 # Infinity, used to set T decay timeconstant for no decay.
@@ -21,7 +21,7 @@ inf = float('inf')
 nan = float('nan')
 
 
-class DLFUCache(collections.MutableMapping):
+class DLFUCache(abc.MutableMapping):
   """Decaying LFU Cache
 
   Attributes:
@@ -174,21 +174,21 @@ class DLFUCache(collections.MutableMapping):
   def hit_rate(self):
     """The cache contents hit rate."""
     if 0 < self.get_count:
-      return float(self.hit_count) / self.get_count
+      return self.hit_count / self.get_count
     return nan
 
   @property
   def mhit_rate(self):
     """The extra metadata hit rate."""
     if 0 < self.get_count:
-      return float(self.mhit_count) / self.get_count
+      return self.mhit_count / self.get_count
     return nan
 
   @property
   def thit_rate(self):
     """The total cache+metadata hit rate."""
     if 0 < self.get_count:
-      return float(self.thit_count) / self.get_count
+      return self.thit_count / self.get_count
     return nan
 
   def _inccqueue(self, key):

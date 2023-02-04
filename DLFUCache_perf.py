@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/pypy3
 """Tests for DLFUCache.
 
 For testing we use an integer cache key between 0 and MAXK.
@@ -38,7 +38,7 @@ def wrap(v, minv, maxv):
 def cycle(*gens):
   """Combines multiple access generators by cycling through them."""
   for g in itertools.cycle(gens):
-    yield g.next()
+    yield next(g)
 
 
 def expo(median, offset=0):
@@ -48,7 +48,7 @@ def expo(median, offset=0):
     yield int(random.expovariate(lambd) + offset)
 
 
-def walk(variance, start=MAXK/2, minv=0, maxv=MAXK):
+def walk(variance, start=MAXK//2, minv=0, maxv=MAXK):
   """Stochastic "gaussian walk" access generator."""
   mu = start
   sigma = variance**0.5
@@ -92,7 +92,7 @@ def runtest(name, cache, gen, count=1000):
   cache.clear()
   for key in itertools.islice(gen, count):
     get(cache, key)
-  print name, cache
+  print(name, cache)
   return cache.hit_rate
 
 
@@ -100,7 +100,7 @@ def alltests(cache, N, C):
   e = runtest("expo", cache, expo(N), C)
   j = runtest("jump", cache, jump(N), C)
   w = runtest("walk", cache, walk(2*N), C)
-  m = runtest("mixed", cache, mixed(N/4), C)
+  m = runtest("mixed", cache, mixed(N//4), C)
   return e,j,w,m
 
 
@@ -108,7 +108,7 @@ if __name__ == '__main__':
   N = 1024
   C = 128 * N
   for T in (0.0, 1.0, 2.0, 4.0, 8.0, 16.0, inf):
-    for M in (0, N/2, N, 2*N):
+    for M in (0, N//2, N, 2*N):
       cache = DLFUCache(N, M, T)
       alltests(cache, N, C)
   cache = ARCCache(N)

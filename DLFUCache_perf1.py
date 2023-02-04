@@ -1,4 +1,4 @@
-#!/usr/bin/python -O
+#!/usr/bin/python3 -O
 """Tests for DLFUCache.
 
 For testing we use an integer cache key between 0 and MAXK.

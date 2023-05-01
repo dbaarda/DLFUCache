@@ -209,6 +209,15 @@ class DLFUCache(abc.MutableMapping):
       return self.thit_count / self.get_count
     return nan
 
+  @property
+  def _tqueue_min(self):
+    """The total queue minimum value."""
+    if 0 < self.msize == len(self.mqueue):
+      return self.mqueue.peekitem()[1]
+    elif self.size == len(self.cqueue):
+      return self.cqueue.peekitem()[1]
+    return 0.0
+
   def _inccqueue(self, key):
     """Increment the access count of a cqueue entry."""
     old_count = self.cqueue[key]
@@ -293,23 +302,23 @@ class DLFUCache(abc.MutableMapping):
       # Metadata hit.
       self.mhit_count += 1
       self._incmqueue(key)
-    elif self.mcount_min <= 1.0 or self.T == 0.0:
+    else:
       # Cache miss.
-      self._setmqueue(key, self.C)
+      self._setmqueue(key, self._tqueue_min/2 + self.C)
     self._decayall()
     return self.data[key]
 
   def __setitem__(self, key, value):
     self.set_count += 1
     # Bypass the cache if the count is too low and not running as LRU.
-    if self.T != 0.0 and self.count_min > (self.getcount(key) or 1.0):
+    if self.T != 0.0 and self.count_min > self.getcount(key):
       return
     if key in self.mqueue:
       # Move the entry from the mqueue to the cqueue.
       self._movmqueue(key)
     elif key not in self.cqueue:
       # Add a new entry to the cqueue.
-      self._setcqueue(key, self.C)
+      self._setcqueue(key, self._tqueue_min/2 + self.C)
     self.data[key] = value
 
   def __delitem__(self, key):
@@ -329,7 +338,8 @@ class DLFUCache(abc.MutableMapping):
       return self.cqueue[key] / self.C
     if key in self.mqueue:
       return self.mqueue[key] / self.C
-    return 0.0
+    # Assume unknown keys have minimum count and will be incremented.
+    return self._tqueue_min / (2 * self.C) + 1.0
 
   def __repr__(self):
     return "%s(size=%s, msize=%s, T=%3.1f)" % (

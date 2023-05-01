@@ -62,26 +62,32 @@ def scan(start=0, step=1, minv=0, maxv=MAXK):
   value = start
   while True:
     yield int(value)
-    value += step
-    if value >= maxv:
-      value -= maxv - minv
+    value = wrap(value+step, minv, maxv)
 
 
-def jump(median, interval=16, start=0.0, step=4.0):
+def jump(median, start=0, dist=4, wait=16):
   """Jumping expo access generator."""
-  offset = start * median
-  duration = interval * median
+  offset = start
+  duration = int(wait * median)
   while True:
     for i in itertools.islice(expo(median, offset), duration):
       yield i
-    offset += step*median
+    offset += dist*median
+
+
+def wave(median, start=0, step=0.5, minv=0, maxv=MAXK):
+  """Sliding expo wave access generator."""
+  egen=expo(median)
+  sgen=scan(start, step, minv, maxv)
+  while True:
+    yield wrap(next(sgen) - next(egen), minv, maxv)
 
 
 def mixed(size):
   """A nasty mixture of access generators."""
   g1 = expo(size)
   g2 = jump(size, start=4*size)
-  g3 = walk(2*size)
+  g3 = wave(size//3, start=8*size)
   g4 = scan()
   return cycle(g1, g2, g3, g4)
 
@@ -99,9 +105,10 @@ def runtest(name, cache, gen, count=1000):
 def alltests(cache, N, C):
   e = runtest("expo", cache, expo(N), C)
   j = runtest("jump", cache, jump(N), C)
+  s = runtest("wave", cache, wave(N//3), C)
   w = runtest("walk", cache, walk(2*N), C)
   m = runtest("mixed", cache, mixed(N//4), C)
-  return e,j,w,m
+  return e,j,s,w,m
 
 
 if __name__ == '__main__':

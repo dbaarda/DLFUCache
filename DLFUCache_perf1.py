@@ -19,7 +19,7 @@ Ts = [0.0, 1.0, 2.0, 4.0, 8.0, 16.0, inf, 'ARC']
 Cs = ['LRU', '1.0', '2.0', '4.0', '8.0', '16.0', 'LFU', 'ARC']
 Ns = [64<<n for n in range(8)]
 Ms = range(0, 2049, 256)
-loads = ['expo', 'jump', 'walk', 'mixed']
+loads = ['expo', 'jump', 'wave', 'walk', 'mixed']
 
 
 def get_label(T):
@@ -58,12 +58,19 @@ def allcachetests(results, N, M, D, I):
     allloadtests(results, N, M, T, D, C)
 
 
-def saveplt(filename, title, xlabel, ticks, labels=None):
-  labels = labels or [str(n) for n in ticks]
+def saveplt(filename, title, xlabel=None, xticks=None, xlabels=None,
+            ylabel=None, yticks=None, ylabels=None):
   plt.title(title)
-  plt.xlabel(xlabel)
-  plt.ylabel('hit rate')
-  plt.xticks(ticks, labels)
+  if xlabel:
+    plt.xlabel(xlabel)
+  if ylabel:
+    plt.ylabel(ylabel)
+  if xticks:
+    xlabels = xlabels or [str(n) for n in xticks]
+    plt.xticks(xticks, xlabels)
+  if yticks:
+    ylabels = ylabels or [str(n) for n in yticks]
+    plt.yticks(yticks, ylabels)
   plt.grid()
   plt.legend()
   plt.savefig(filename)
@@ -80,7 +87,7 @@ def RunLoads(results, I):
       plt.plot(Ns, hits, label=get_label(T))
     plt.xscale('log')
     saveplt('load-%s.svg' % load, '%s load vs dist&cache size' % load,
-            'dist and size', Ns)
+            'dist and size', Ns, ylabel='hit_rate')
 
 
 def RunMsizes(results, I):
@@ -92,7 +99,8 @@ def RunMsizes(results, I):
     for T in Ts:
       hits = [results[(load, N, M, T, N)] for M in Ms]
       plt.plot(Ms, hits, label=get_label(T))
-    saveplt('msize-%s.svg' % load, '%s load vs cache msize' % load, 'msize', Ms)
+    saveplt('msize-%s.svg' % load, '%s load vs cache msize' % load,
+            'msize', Ms, ylabel='hit_rate')
 
 
 def RunSizes(results, I):
@@ -105,7 +113,8 @@ def RunSizes(results, I):
       hits = [results[(load, N, N, T, D)] for N in Ns]
       plt.plot(Ns, hits, label=get_label(T))
     plt.xscale('log')
-    saveplt('size-%s.svg' % load, '%s load vs cache size' % load, 'size', Ns)
+    saveplt('size-%s.svg' % load, '%s load vs cache size' % load,
+            'size', Ns, ylabel='hit_rate')
 
 
 def RunTs(results, I):
@@ -117,8 +126,8 @@ def RunTs(results, I):
     plt.plot(hits, label='DLFU')
     hits = [results[(load, N, N, 'ARC', N)]] * len(hits)
     plt.plot(hits, label='ARC')
-    saveplt('Ts-%s.svg' % load, '%s load vs T' % load, 'T',
-            range(len(hits)), Cs[:-1])
+    saveplt('Ts-%s.svg' % load, '%s load vs T' % load,
+            'T', range(len(hits)), Cs[:-1], ylabel='hit_rate')
 
 
 if __name__ == '__main__':

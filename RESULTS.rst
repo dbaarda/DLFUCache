@@ -72,6 +72,32 @@ This access pattern should strongly favour LRU caches, where
 short-term past access history is the best hint for future access
 patterns.
 
+wave
+----
+
+After looking at the results for walk more closely, it became apparent that it
+was too random. The walk will hover around some values for a while, then
+suddenly zoom off to other values, then drift, etc. This makes the cache
+performance metrics vary wildly depending on the sample time and random seed,
+making the results not very repeatable. This makes it difficult to analyse the
+impact of changing cache parameters. A more predictable pattern that favours
+LRU was needed.
+
+This uses a reverse exponential distribution "wave" that constantly sweeps
+forwards, so new entries are hit regularly at the wave's leading edge, but
+then taper away on the wave's tail as it moves past. Like walk, the wave
+"wraps around" past the min and max values for the entry range (default:
+minv=0, maxv=MAXK). The settings are the expo wave's median, and the scan
+sweep's step (default: 1/4).
+
+The theoretical max hit rate for caches much larger than the expo median is
+dependent on the scan step. With step=1/4, after 4x the wave's width worth of
+fetches the wave has fully moved past, so each entry will get fetched an
+average of 4 times, and the first must be a miss, for a 75% hit rate. When the
+cache size is small relative to the expo median, the hit rate will be less
+because not all of the wave fits in the cache. With median=size/2 the best hit
+rate is about 50%.
+
 jump
 ----
 
@@ -111,20 +137,18 @@ much better job of ignoring these accessess.
 mixed
 -----
 
-A mixture of expo, jump, walk, and scan patterns running at the same
-time. This represents a long-running background task with a working
-set, a sequence of short-running tasks with different working sets, a
-long-running task doing a random walk, and a long-running scan, all
-running at once.
+A mixture of expo, jump, wave, and scan patterns running at the same time.
+This represents a long-running background task with a working set, a sequence
+of short-running tasks with different working sets, a long-running task
+sweeping across memory, and a long-running scan, all running at once.
 
-The only setting is the size, used to set the median and variance of
-the expo, jump, and walk patterns.
+The only setting is the size, used to set the median and variance of the expo,
+jump, and wave patterns.
 
-The best possible theoritical hitrate assuming 1/4 of the cache is
-used for each load pattern is about (50% + 50% + 43% + 0%) / 4 = 35%.
-However, caches that successfully ignore the scan and use 1/3 of the
-cache each for the other load patterns could in theory do better than
-this.
+The best possible theoritical hitrate assuming 1/4 of the cache is used for
+each load pattern is about (50% + 43% + 50% + 0%) / 4 = 36%. However, caches
+that successfully ignore the scan and use 1/3 of the cache each for the other
+load patterns could in theory do better than this.
 
 Results
 =======
@@ -158,14 +182,16 @@ We use size = msize = dist, and scale size between 64 to 2048.
 
 .. image:: load-walk.svg
 
+.. image:: load-wave.svg
+
 .. image:: load-jump.svg
 
 .. image:: load-mixed.svg
 
-These show that the loads are pretty stable as the test size is
-scaled, particularly for sizes greater than 512. The jump and expo
-loads are very stable, with walk, and consequently mixed, being more
-unstable.
+These show that the loads are pretty stable as the test size is scaled,
+particularly for sizes greater than 512. The expo, wave, jump, and
+consequently mixed loads are very stable, with walk being more visibly
+unstable because of its unpredictable behaviour.
 
 There are also hints that LFU performance is more unstable, with the
 "early hit luck" during the warmup phase having a big affect on the
@@ -188,6 +214,8 @@ We use size = dist and vary msize between 0~2x size.
 
 .. image:: msize-walk.svg
 
+.. image:: msize-wave.svg
+
 .. image:: msize-jump.svg
 
 .. image:: msize-mixed.svg
@@ -197,14 +225,14 @@ cache performance, particularly with large T values. Interestingly
 just adding metadata to LFU significantly improves its performance,
 peaking at better than all other caches for expo when msize = 2xsize.
 
-The walk graph shows that for large T adding metadata initially makes
-it worse, as expected from adding more history information for a load
-pattern that doesn't depend on history. Interestingly it gets better
-as the metadata size increases, suggesting that with enough history
-the cache "sees" that the history is meaningless.
+The walk and wave graphs shows that for large T adding metadata initially
+makes it worse, as expected from adding more history information for a load
+pattern that doesn't depend on history. Interestingly it gets better as the
+metadata size increases, suggesting that with enough history the cache "sees"
+that the history is meaningless.
 
 The mixed graph shows that adding metadata also improves things for
-large T, but not as much due to the walk effects.
+large T, but not as much due to the wave effects.
 
 Overall, setting msize = size seems to be the sweet spot for best
 results vs overheads, with diminishing returns for adding more.
@@ -225,6 +253,8 @@ We use dist = 1024 and msize=size, varying size between 64 to 8192.
 
 .. image:: size-walk.svg
 
+.. image:: size-wave.svg
+
 .. image:: size-jump.svg
 
 .. image:: size-mixed.svg
@@ -238,8 +268,8 @@ decay rate is faster, allowing the cache to "forget" and re-learn
 between jumps, but as the size increases the decay rate is slower,
 making the cache remember too much history before jumps.
 
-No surprises for expo and walk loads; T=16.0 wins for expo and LRU
-wins for walk. Of mild interest is T=16.0 beats LFU for expo, which I
+No surprises for expo, walk, and wave loads; T=16.0 wins for expo and LRU wins
+for walk and wave. Of mild interest is T=16.0 beats LFU for expo, which I
 believe is due to "early hit stickiness" undermining it.
 
 The mixed result shows the expected mixed behaviour of the other
@@ -258,14 +288,16 @@ We use dist=size=msize=1024
 
 .. image:: Ts-walk.svg
 
+.. image:: Ts-wave.svg
+
 .. image:: Ts-jump.svg
 
 .. image:: Ts-mixed.svg
 
-For expo, DLFU with T=16.0 is best and will significantly beat ARC.
-For walk, LRU or T=0.0 wins and just beats ARC, but T=2.0 is still
-close and would be a better compromise. For jump and mixed T=4.0 will
-just beat ARC.
+For expo, DLFU with T=16.0 is best and will significantly beat ARC. For walk,
+LRU or T=0.0 wins and just beats ARC, but T=2.0 is still close and would be a
+better compromise. For wave, it is similar to walk but gives a more
+predictable curve. For jump and mixed T=4.0 will just beat ARC.
 
 
 Summary
@@ -274,7 +306,7 @@ Summary
 DLFU can beat ARC, for some loads quite significantly, provided the
 right T is chosen. If you had to pick a fixed value, T=4.0 would
 probably be best, but T=8.0 would be better for expo type loads, and
-T=2.0 would be better for more walk style loads.
+T=2.0 would be better for more walk or wave style loads.
 
 The extra metadata used by DLFU compared to LFRU also significantly
 improves the cache hitrate, particularly for T values larger than 2.0.

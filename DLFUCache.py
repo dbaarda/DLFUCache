@@ -71,8 +71,8 @@ class DLFUCache(abc.MutableMapping):
     self.msize = msize
     self.T = T
     if T == 0.0:
-      # Behave like LRU with no exponential decay of counts.
-      self.M = 1.0
+      # Behave like LRU with all counts decayed to zero.
+      self.M = inf
       PQueue = PQueueLRU
     elif T == inf:
       # Behave like LFU with no exponential decay of counts.
@@ -211,20 +211,26 @@ class DLFUCache(abc.MutableMapping):
 
   def _inccqueue(self, key):
     """Increment the access count of a cqueue entry."""
+    # For LRU pre-decay increment to zero, otherwise increment by C.
+    p = self.C if self.T else 0.0
     old_count = self.cqueue[key]
-    self.cqueue[key] += self.C
-    self.count_sum += self.C
+    self.cqueue[key] += p
+    self.count_sum += p
     self.count_sum2 += self.cqueue[key]**2 - old_count**2
 
   def _incmqueue(self, key):
     """Increment the access count of a mqueue entry."""
+    # For LRU pre-decay increment to zero, otherwise increment by C.
+    p = self.C if self.T else 0.0
     old_count = self.mqueue[key]
-    self.mqueue[key] += self.C
-    self.mcount_sum += self.C
+    self.mqueue[key] += p
+    self.mcount_sum += p
     self.mcount_sum2 += self.mqueue[key]**2 - old_count**2
 
   def _setmqueue(self, k, p):
     """Set the access count of a new mqueue entry."""
+    # If LRU pre-decay the value to zero.
+    p = p if self.T else 0.0
     if len(self.mqueue) < self.msize:
       # Just add a new entry.
       self.mqueue[k] = p
@@ -238,6 +244,8 @@ class DLFUCache(abc.MutableMapping):
 
   def _setcqueue(self, k, p):
     """Set the access count of a new cqueue entry."""
+    # If LRU pre-decay the value to zero.
+    p = p if self.T else 0.0
     if len(self.cqueue) < self.size:
       # Just add a new entry.
       self.cqueue[k] = p
@@ -269,19 +277,21 @@ class DLFUCache(abc.MutableMapping):
 
   def _decayall(self):
     """Apply decay to all counts."""
-    # Exponentially grow C O(1) instead of decaying all entries O(N).
-    self.C *= self.M
-    # If C has become too big, exponentially decay C and all counts back to 1.0.
-    if self.C >= 1.0e100:
-      decay = 1.0 / self.C
-      self.cqueue.scale(decay)
-      self.mqueue.scale(decay)
-      self.count_sum *= decay
-      self.mcount_sum *= decay
-      decay2 = decay * decay
-      self.count_sum2 *= decay2
-      self.mcount_sum2 *= decay2
-      self.C = 1.0
+    # Skip decaying already zeroed counts for LRU.
+    if self.T:
+      # Exponentially grow C O(1) instead of decaying all entries O(N).
+      self.C *= self.M
+      # If C has become too big, exponentially decay C and all counts back to 1.0.
+      if self.C >= 1.0e100:
+        decay = 1.0 / self.C
+        self.cqueue.scale(decay)
+        self.mqueue.scale(decay)
+        self.count_sum *= decay
+        self.mcount_sum *= decay
+        decay2 = decay * decay
+        self.count_sum2 *= decay2
+        self.mcount_sum2 *= decay2
+        self.C = 1.0
 
   def __getitem__(self, key):
     self.get_count += 1
@@ -293,7 +303,7 @@ class DLFUCache(abc.MutableMapping):
       # Metadata hit.
       self.mhit_count += 1
       self._incmqueue(key)
-    elif self.mcount_min <= 1.0 or self.T == 0.0:
+    elif self.mcount_min <= 1.0:
       # Cache miss.
       self._setmqueue(key, self.C)
     self._decayall()
@@ -302,7 +312,7 @@ class DLFUCache(abc.MutableMapping):
   def __setitem__(self, key, value):
     self.set_count += 1
     # Bypass the cache if the count is too low and not running as LRU.
-    if self.T != 0.0 and self.count_min > (self.getcount(key) or 1.0):
+    if self.count_min > (self.getcount(key) or 1.0):
       return
     if key in self.mqueue:
       # Move the entry from the mqueue to the cqueue.

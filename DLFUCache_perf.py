@@ -75,7 +75,7 @@ def jump(median, start=0, dist=4, wait=16):
     offset += dist*median
 
 
-def wave(median, start=0, step=0.5, minv=0, maxv=MAXK):
+def wave(median, start=0, step=0.25, minv=0, maxv=MAXK):
   """Sliding expo wave access generator."""
   egen=expo(median)
   sgen=scan(start, step, minv, maxv)
@@ -87,7 +87,7 @@ def mixed(size):
   """A nasty mixture of access generators."""
   g1 = expo(size)
   g2 = jump(size, start=4*size)
-  g3 = wave(size//3, start=8*size)
+  g3 = wave(size//2, start=8*size)
   g4 = scan()
   return cycle(g1, g2, g3, g4)
 
@@ -105,7 +105,7 @@ def runtest(name, cache, gen, count=1000):
 def alltests(cache, N, C):
   e = runtest("expo", cache, expo(N), C)
   j = runtest("jump", cache, jump(N), C)
-  s = runtest("wave", cache, wave(N//3), C)
+  s = runtest("wave", cache, wave(N//2), C)
   w = runtest("walk", cache, walk(2*N), C)
   m = runtest("mixed", cache, mixed(N//4), C)
   return e,j,s,w,m

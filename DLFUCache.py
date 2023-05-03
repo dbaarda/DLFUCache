@@ -106,6 +106,21 @@ class DLFUCache(abc.MutableMapping):
     self.mhit_count = 0
 
   @property
+  def _cqueue_min(self):
+    """The cqueue minimum value."""
+    return self.cqueue.peekitem()[1] if self.size == len(self.cqueue) else 0.0
+
+  @property
+  def _mqueue_min(self):
+    """The mqueue minimum value."""
+    return self.mqueue.peekitem()[1] if self.msize == len(self.mqueue) else 0.0
+
+  @property
+  def _tqueue_min(self):
+    """The total queue minimum value."""
+    return self._mqueue_min if self.msize else self._cqueue_min
+
+  @property
   def tsize(self):
     """The total number of entries in cache+metadata."""
     return self.size + self.msize
@@ -128,16 +143,12 @@ class DLFUCache(abc.MutableMapping):
   @property
   def count_min(self):
     """The cache contents minimum access count."""
-    if self.size == len(self.cqueue):
-      return self.cqueue.peekitem()[1] / self.C
-    return 0.0
+    return self._cqueue_min / self.C
 
   @property
   def mcount_min(self):
     """The extra metadata minimum access count."""
-    if 0 < self.msize == len(self.mqueue):
-      return self.mqueue.peekitem()[1] / self.C
-    return 0.0
+    return self._mqueue_min / self.C if self.msize else nan
 
   @property
   def count_avg(self):
@@ -209,15 +220,6 @@ class DLFUCache(abc.MutableMapping):
       return self.thit_count / self.get_count
     return nan
 
-  @property
-  def _tqueue_min(self):
-    """The total queue minimum value."""
-    if 0 < self.msize == len(self.mqueue):
-      return self.mqueue.peekitem()[1]
-    elif self.size == len(self.cqueue):
-      return self.cqueue.peekitem()[1]
-    return 0.0
-
   def _inccqueue(self, key):
     """Increment the access count of a cqueue entry."""
     # For LRU pre-decay increment to zero, otherwise increment by C.
@@ -237,31 +239,31 @@ class DLFUCache(abc.MutableMapping):
     self.mcount_sum2 += self.mqueue[key]**2 - old_count**2
 
   def _setmqueue(self, k, p):
-    """Set the access count of a new mqueue entry."""
+    """Set the access count of a new mqueue entry if it is good enough."""
     # If LRU pre-decay the value to zero.
     p = p if self.T else 0.0
     if len(self.mqueue) < self.msize:
-      # Just add a new entry.
+      # There is space, just add a new entry.
       self.mqueue[k] = p
       self.mcount_sum += p
       self.mcount_sum2 += p*p
-    elif self.mqueue:
-      # Flush an old entry out.
+    elif self.mqueue and self._mqueue_min <= p:
+      # If's higher than the mqueue min entry, replace it.
       mink, minp = self.mqueue.swapitem(k, p)
       self.mcount_sum += p - minp
       self.mcount_sum2 += p*p - minp*minp
 
   def _setcqueue(self, k, p):
-    """Set the access count of a new cqueue entry."""
+    """Set the access count of a new cqueue entry if it is good enough."""
     # If LRU pre-decay the value to zero.
     p = p if self.T else 0.0
     if len(self.cqueue) < self.size:
-      # Just add a new entry.
+      # Theres space, just add a new entry.
       self.cqueue[k] = p
       self.count_sum += p
       self.count_sum2 += p*p
-    else:
-      # Cascade a flushed entry to the mqueue.
+    elif self._cqueue_min <= p:
+      # Its higher than the cqueue min entry, cascade it to the mqueue.
       mink, minp = self.cqueue.swapitem(k, p)
       self._setmqueue(mink, minp)
       self.count_sum += p - minp
@@ -269,20 +271,22 @@ class DLFUCache(abc.MutableMapping):
       del self.data[mink]
 
   def _movcqueue(self, k):
-    """Move a cqueue entry to the mqueue."""
+    """Move a cqueue entry to the mqueue unconditionally."""
     # Cascade a cqueue entry down to the mqueue.
+    # Note we do this even if it is higher than cqueue_min for deletions.
     k, p = self.cqueue.popitem(k)
     self.count_sum -= p
     self.count_sum2 -= p*p
     self._setmqueue(k, p)
 
   def _movmqueue(self, k):
-    """Move an mqueue entry to the cqueue."""
-    # Cascade an mqueue entry up to the cqueue.
-    k, p = self.mqueue.popitem(k)
-    self.mcount_sum -= p
-    self.mcount_sum2 -= p*p
-    self._setcqueue(k, p)
+    """Move an mqueue entry to the cqueue if it is good enough."""
+    if self._cqueue_min <= self.mqueue[k]:
+      # It's higher than the cqueue min entry, cascade it up to the cqueue.
+      k, p = self.mqueue.popitem(k)
+      self.mcount_sum -= p
+      self.mcount_sum2 -= p*p
+      self._setcqueue(k, p)
 
   def _decayall(self):
     """Apply decay to all counts."""
@@ -305,31 +309,30 @@ class DLFUCache(abc.MutableMapping):
   def __getitem__(self, key):
     self.get_count += 1
     if key in self.cqueue:
-      # Cache hit.
+      # Cache hit, increment count in cqueue.
       self.hit_count += 1
       self._inccqueue(key)
     elif key in self.mqueue:
-      # Metadata hit.
+      # Metadata hit increment count in mqueue.
       self.mhit_count += 1
       self._incmqueue(key)
-    elif self.mcount_min <= 1.0:
-      # Cache miss.
-      self._setmqueue(key, self._tqueue_min/2 + self.C)
+    else:
+      # Cache miss, add it to the mqueue (if good enough).
+      self._setmqueue(key, 0.5 * self._tqueue_min + self.C)
     self._decayall()
     return self.data[key]
 
   def __setitem__(self, key, value):
     self.set_count += 1
-    # Bypass the cache if the count is too low and not running as LRU.
-    if self.count_min > (self.getcount(key) or 1.0):
-      return
     if key in self.mqueue:
-      # Move the entry from the mqueue to the cqueue.
+      # Move the entry from the mqueue to the cqueue (if good enough).
       self._movmqueue(key)
     elif key not in self.cqueue:
-      # Add a new entry to the cqueue.
-      self._setcqueue(key, self._tqueue_min/2 + self.C)
-    self.data[key] = value
+      # Add a new entry to the cqueue (if good enough).
+      self._setcqueue(key, 0.5 * self._tqueue_min + self.C)
+    if key in self.cqueue:
+      # It is in the cqueue, cache the value.
+      self.data[key] = value
 
   def __delitem__(self, key):
     # Move entry from the cqueue to the mqueue.
@@ -348,8 +351,8 @@ class DLFUCache(abc.MutableMapping):
       return self.cqueue[key] / self.C
     if key in self.mqueue:
       return self.mqueue[key] / self.C
-    # Assume unknown keys have minimum count and will be incremented.
-    return self._tqueue_min / (2 * self.C) + 1.0
+    # Assume unknown keys have half the minimum count.
+    return 0.5 * self._tqueue_min / self.C
 
   def __repr__(self):
     return "%s(size=%s, msize=%s, T=%3.1f)" % (

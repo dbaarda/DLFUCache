@@ -42,7 +42,7 @@ class PQueueVect(abc.MutableMapping):
     if key is self.__marker:
       return self._peek()
     else:
-      return self.peek(self.data[key])
+      return self._peek(self.data[key])
 
   def popitem(self, key=__marker):
     """popitem([key]) -> key, value."""

@@ -56,6 +56,7 @@ class DLFUCache(abc.MutableMapping):
     mhit_rate: The hit_rate for extra metadata.
     thit_count: The total count of cache+metadata hits.
     tsize: The total number of entries in the cache+metadata.
+    tcount_min: The minimum count value for cache+metadata entries.
     tcount_sum: The sum of all cache+metatdata entry counts.
     tcount_sum2: The sum of the square of all cache+metadata entry counts.
     tcount_avg: The average of count values for cache+metadata.
@@ -138,6 +139,11 @@ class DLFUCache(abc.MutableMapping):
     if 0 < self.msize == len(self.mqueue):
       return self.mqueue.peekitem()[1] / self.C
     return 0.0
+
+  @property
+  def tcount_min(self):
+    """The extra metadata minimum access count."""
+    return self.mcount_min if self.msize else self.count_min
 
   @property
   def count_avg(self):

@@ -1,8 +1,8 @@
-expo DLFUCache(size=1024, msize=0, T=0.0): gets=131072 hit=0.324 avg=0.000 var=0.000 min=0.000 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-jump DLFUCache(size=1024, msize=0, T=0.0): gets=131072 hit=0.315 avg=0.000 var=0.000 min=0.000 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-wave DLFUCache(size=1024, msize=0, T=0.0): gets=131072 hit=0.498 avg=0.000 var=0.000 min=0.000 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-walk DLFUCache(size=1024, msize=0, T=0.0): gets=131072 hit=0.466 avg=0.000 var=0.000 min=0.000 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-mixed DLFUCache(size=1024, msize=0, T=0.0): gets=131072 hit=0.295 avg=0.000 var=0.000 min=0.000 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
+expo DLFUCache(size=1024, msize=0, T=0.0): gets=131072 hit=0.324 avg=0.000 var=0.000 min=0.000 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+jump DLFUCache(size=1024, msize=0, T=0.0): gets=131072 hit=0.315 avg=0.000 var=0.000 min=0.000 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+wave DLFUCache(size=1024, msize=0, T=0.0): gets=131072 hit=0.498 avg=0.000 var=0.000 min=0.000 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+walk DLFUCache(size=1024, msize=0, T=0.0): gets=131072 hit=0.466 avg=0.000 var=0.000 min=0.000 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+mixed DLFUCache(size=1024, msize=0, T=0.0): gets=131072 hit=0.295 avg=0.000 var=0.000 min=0.000 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
 expo DLFUCache(size=1024, msize=512, T=0.0): gets=131072 hit=0.324 avg=0.000 var=0.000 min=0.000 mhit=0.139 mavg=0.000 mvar=0.000 mmin=0.000
 jump DLFUCache(size=1024, msize=512, T=0.0): gets=131072 hit=0.315 avg=0.000 var=0.000 min=0.000 mhit=0.127 mavg=0.000 mvar=0.000 mmin=0.000
 wave DLFUCache(size=1024, msize=512, T=0.0): gets=131072 hit=0.498 avg=0.000 var=0.000 min=0.000 mhit=0.118 mavg=0.000 mvar=0.000 mmin=0.000
@@ -18,11 +18,11 @@ jump DLFUCache(size=1024, msize=2048, T=0.0): gets=131072 hit=0.315 avg=0.000 va
 wave DLFUCache(size=1024, msize=2048, T=0.0): gets=131072 hit=0.498 avg=0.000 var=0.000 min=0.000 mhit=0.232 mavg=0.000 mvar=0.000 mmin=0.000
 walk DLFUCache(size=1024, msize=2048, T=0.0): gets=131072 hit=0.466 avg=0.000 var=0.000 min=0.000 mhit=0.186 mavg=0.000 mvar=0.000 mmin=0.000
 mixed DLFUCache(size=1024, msize=2048, T=0.0): gets=131072 hit=0.295 avg=0.000 var=0.000 min=0.000 mhit=0.273 mavg=0.000 mvar=0.000 mmin=0.000
-expo DLFUCache(size=1024, msize=0, T=1.0): gets=131072 hit=0.337 avg=0.772 var=0.149 min=0.342 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-jump DLFUCache(size=1024, msize=0, T=1.0): gets=131072 hit=0.325 avg=0.772 var=0.149 min=0.342 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-wave DLFUCache(size=1024, msize=0, T=1.0): gets=131072 hit=0.504 avg=0.850 var=0.239 min=0.306 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-walk DLFUCache(size=1024, msize=0, T=1.0): gets=131072 hit=0.461 avg=0.853 var=0.263 min=0.320 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-mixed DLFUCache(size=1024, msize=0, T=1.0): gets=131072 hit=0.311 avg=0.760 var=0.155 min=0.342 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
+expo DLFUCache(size=1024, msize=0, T=1.0): gets=131072 hit=0.337 avg=0.772 var=0.149 min=0.342 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+jump DLFUCache(size=1024, msize=0, T=1.0): gets=131072 hit=0.325 avg=0.772 var=0.149 min=0.342 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+wave DLFUCache(size=1024, msize=0, T=1.0): gets=131072 hit=0.504 avg=0.850 var=0.239 min=0.306 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+walk DLFUCache(size=1024, msize=0, T=1.0): gets=131072 hit=0.461 avg=0.853 var=0.263 min=0.320 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+mixed DLFUCache(size=1024, msize=0, T=1.0): gets=131072 hit=0.311 avg=0.760 var=0.155 min=0.342 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
 expo DLFUCache(size=1024, msize=512, T=1.0): gets=131072 hit=0.339 avg=0.797 var=0.155 min=0.350 mhit=0.135 mavg=0.242 mvar=0.003 mmin=0.152
 jump DLFUCache(size=1024, msize=512, T=1.0): gets=131072 hit=0.326 avg=0.797 var=0.155 min=0.350 mhit=0.124 mavg=0.242 mvar=0.003 mmin=0.152
 wave DLFUCache(size=1024, msize=512, T=1.0): gets=131072 hit=0.503 avg=0.870 var=0.239 min=0.317 mhit=0.118 mavg=0.187 mvar=0.004 mmin=0.096
@@ -38,11 +38,11 @@ jump DLFUCache(size=1024, msize=2048, T=1.0): gets=131072 hit=0.327 avg=0.810 va
 wave DLFUCache(size=1024, msize=2048, T=1.0): gets=131072 hit=0.502 avg=0.872 var=0.238 min=0.319 mhit=0.229 mavg=0.064 mvar=0.007 mmin=0.001
 walk DLFUCache(size=1024, msize=2048, T=1.0): gets=131072 hit=0.462 avg=0.866 var=0.265 min=0.320 mhit=0.190 mavg=0.066 mvar=0.006 mmin=0.004
 mixed DLFUCache(size=1024, msize=2048, T=1.0): gets=131072 hit=0.314 avg=0.784 var=0.160 min=0.350 mhit=0.258 mavg=0.106 mvar=0.009 mmin=0.009
-expo DLFUCache(size=1024, msize=0, T=2.0): gets=131072 hit=0.357 avg=1.149 var=0.283 min=0.647 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-jump DLFUCache(size=1024, msize=0, T=2.0): gets=131072 hit=0.336 avg=1.149 var=0.283 min=0.647 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-wave DLFUCache(size=1024, msize=0, T=2.0): gets=131072 hit=0.490 avg=1.321 var=0.412 min=0.667 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-walk DLFUCache(size=1024, msize=0, T=2.0): gets=131072 hit=0.447 avg=1.286 var=0.390 min=0.642 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-mixed DLFUCache(size=1024, msize=0, T=2.0): gets=131072 hit=0.328 avg=1.116 var=0.318 min=0.637 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
+expo DLFUCache(size=1024, msize=0, T=2.0): gets=131072 hit=0.357 avg=1.149 var=0.283 min=0.647 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+jump DLFUCache(size=1024, msize=0, T=2.0): gets=131072 hit=0.336 avg=1.149 var=0.283 min=0.647 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+wave DLFUCache(size=1024, msize=0, T=2.0): gets=131072 hit=0.490 avg=1.321 var=0.412 min=0.667 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+walk DLFUCache(size=1024, msize=0, T=2.0): gets=131072 hit=0.447 avg=1.286 var=0.390 min=0.642 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+mixed DLFUCache(size=1024, msize=0, T=2.0): gets=131072 hit=0.328 avg=1.116 var=0.318 min=0.637 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
 expo DLFUCache(size=1024, msize=512, T=2.0): gets=131072 hit=0.367 avg=1.260 var=0.295 min=0.702 mhit=0.128 mavg=0.576 mvar=0.005 mmin=0.449
 jump DLFUCache(size=1024, msize=512, T=2.0): gets=131072 hit=0.342 avg=1.260 var=0.294 min=0.702 mhit=0.119 mavg=0.576 mvar=0.005 mmin=0.449
 wave DLFUCache(size=1024, msize=512, T=2.0): gets=131072 hit=0.480 avg=1.406 var=0.394 min=0.724 mhit=0.135 mavg=0.556 mvar=0.008 mmin=0.409
@@ -58,11 +58,11 @@ jump DLFUCache(size=1024, msize=2048, T=2.0): gets=131072 hit=0.346 avg=1.333 va
 wave DLFUCache(size=1024, msize=2048, T=2.0): gets=131072 hit=0.470 avg=1.428 var=0.379 min=0.769 mhit=0.261 mavg=0.276 mvar=0.043 mmin=0.038
 walk DLFUCache(size=1024, msize=2048, T=2.0): gets=131072 hit=0.445 avg=1.353 var=0.396 min=0.679 mhit=0.204 mavg=0.279 mvar=0.025 mmin=0.092
 mixed DLFUCache(size=1024, msize=2048, T=2.0): gets=131072 hit=0.341 avg=1.234 var=0.329 min=0.703 mhit=0.239 mavg=0.338 mvar=0.030 mmin=0.105
-expo DLFUCache(size=1024, msize=0, T=4.0): gets=131072 hit=0.403 avg=1.878 var=0.922 min=0.887 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-jump DLFUCache(size=1024, msize=0, T=4.0): gets=131072 hit=0.329 avg=1.808 var=0.856 min=0.884 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-wave DLFUCache(size=1024, msize=0, T=4.0): gets=131072 hit=0.396 avg=1.788 var=0.721 min=0.917 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-walk DLFUCache(size=1024, msize=0, T=4.0): gets=131072 hit=0.385 avg=1.674 var=0.575 min=0.909 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-mixed DLFUCache(size=1024, msize=0, T=4.0): gets=131072 hit=0.339 avg=1.696 var=0.871 min=0.883 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
+expo DLFUCache(size=1024, msize=0, T=4.0): gets=131072 hit=0.403 avg=1.878 var=0.922 min=0.887 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+jump DLFUCache(size=1024, msize=0, T=4.0): gets=131072 hit=0.329 avg=1.808 var=0.856 min=0.884 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+wave DLFUCache(size=1024, msize=0, T=4.0): gets=131072 hit=0.396 avg=1.788 var=0.721 min=0.917 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+walk DLFUCache(size=1024, msize=0, T=4.0): gets=131072 hit=0.385 avg=1.674 var=0.575 min=0.909 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+mixed DLFUCache(size=1024, msize=0, T=4.0): gets=131072 hit=0.339 avg=1.696 var=0.871 min=0.883 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
 expo DLFUCache(size=1024, msize=512, T=4.0): gets=131072 hit=0.430 avg=2.142 var=0.788 min=0.999 mhit=0.109 mavg=0.884 mvar=0.004 mmin=0.776
 jump DLFUCache(size=1024, msize=512, T=4.0): gets=131072 hit=0.341 avg=2.104 var=0.764 min=0.996 mhit=0.110 mavg=0.880 mvar=0.004 mmin=0.769
 wave DLFUCache(size=1024, msize=512, T=4.0): gets=131072 hit=0.360 avg=2.059 var=0.629 min=1.107 mhit=0.192 mavg=0.932 mvar=0.005 mmin=0.810
@@ -78,11 +78,11 @@ jump DLFUCache(size=1024, msize=2048, T=4.0): gets=131072 hit=0.355 avg=2.309 va
 wave DLFUCache(size=1024, msize=2048, T=4.0): gets=131072 hit=0.376 avg=2.189 var=0.556 min=1.367 mhit=0.350 mavg=0.739 mvar=0.084 mmin=0.311
 walk DLFUCache(size=1024, msize=2048, T=4.0): gets=131072 hit=0.336 avg=1.908 var=0.528 min=1.126 mhit=0.306 mavg=0.657 mvar=0.039 mmin=0.405
 mixed DLFUCache(size=1024, msize=2048, T=4.0): gets=131072 hit=0.370 avg=2.045 var=0.739 min=1.099 mhit=0.227 mavg=0.669 mvar=0.038 mmin=0.369
-expo DLFUCache(size=1024, msize=0, T=8.0): gets=131072 hit=0.450 avg=3.774 var=2.964 min=0.990 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-jump DLFUCache(size=1024, msize=0, T=8.0): gets=131072 hit=0.249 avg=2.542 var=2.164 min=0.958 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-wave DLFUCache(size=1024, msize=0, T=8.0): gets=131072 hit=0.254 avg=2.079 var=0.987 min=0.983 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-walk DLFUCache(size=1024, msize=0, T=8.0): gets=131072 hit=0.258 avg=1.792 var=0.614 min=0.991 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-mixed DLFUCache(size=1024, msize=0, T=8.0): gets=131072 hit=0.316 avg=2.698 var=2.569 min=0.977 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
+expo DLFUCache(size=1024, msize=0, T=8.0): gets=131072 hit=0.450 avg=3.774 var=2.964 min=0.990 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+jump DLFUCache(size=1024, msize=0, T=8.0): gets=131072 hit=0.249 avg=2.542 var=2.164 min=0.958 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+wave DLFUCache(size=1024, msize=0, T=8.0): gets=131072 hit=0.254 avg=2.079 var=0.987 min=0.983 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+walk DLFUCache(size=1024, msize=0, T=8.0): gets=131072 hit=0.258 avg=1.792 var=0.614 min=0.991 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+mixed DLFUCache(size=1024, msize=0, T=8.0): gets=131072 hit=0.316 avg=2.698 var=2.569 min=0.977 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
 expo DLFUCache(size=1024, msize=512, T=8.0): gets=131072 hit=0.462 avg=4.202 var=1.971 min=2.280 mhit=0.126 mavg=1.493 mvar=0.200 mmin=0.954
 jump DLFUCache(size=1024, msize=512, T=8.0): gets=131072 hit=0.267 avg=3.138 var=1.772 min=1.487 mhit=0.090 mavg=1.038 mvar=0.025 mmin=0.906
 wave DLFUCache(size=1024, msize=512, T=8.0): gets=131072 hit=0.256 avg=2.555 var=0.854 min=1.494 mhit=0.119 mavg=1.144 mvar=0.026 mmin=0.967
@@ -98,11 +98,11 @@ jump DLFUCache(size=1024, msize=2048, T=8.0): gets=131072 hit=0.315 avg=3.742 va
 wave DLFUCache(size=1024, msize=2048, T=8.0): gets=131072 hit=0.267 avg=3.059 var=0.748 min=2.077 mhit=0.400 mavg=1.342 mvar=0.139 mmin=0.835
 walk DLFUCache(size=1024, msize=2048, T=8.0): gets=131072 hit=0.274 avg=2.475 var=0.553 min=1.718 mhit=0.328 mavg=1.213 mvar=0.067 mmin=0.879
 mixed DLFUCache(size=1024, msize=2048, T=8.0): gets=131072 hit=0.345 avg=3.497 var=1.734 min=2.062 mhit=0.274 mavg=1.131 mvar=0.156 mmin=0.701
-expo DLFUCache(size=1024, msize=0, T=16.0): gets=131072 hit=0.429 avg=7.110 var=9.125 min=0.999 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-jump DLFUCache(size=1024, msize=0, T=16.0): gets=131072 hit=0.166 avg=2.727 var=3.442 min=0.990 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-wave DLFUCache(size=1024, msize=0, T=16.0): gets=131072 hit=0.149 avg=2.296 var=1.384 min=0.996 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-walk DLFUCache(size=1024, msize=0, T=16.0): gets=131072 hit=0.148 avg=2.133 var=0.898 min=1.000 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-mixed DLFUCache(size=1024, msize=0, T=16.0): gets=131072 hit=0.262 avg=4.219 var=8.894 min=0.995 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
+expo DLFUCache(size=1024, msize=0, T=16.0): gets=131072 hit=0.429 avg=7.110 var=9.125 min=0.999 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+jump DLFUCache(size=1024, msize=0, T=16.0): gets=131072 hit=0.166 avg=2.727 var=3.442 min=0.990 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+wave DLFUCache(size=1024, msize=0, T=16.0): gets=131072 hit=0.149 avg=2.296 var=1.384 min=0.996 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+walk DLFUCache(size=1024, msize=0, T=16.0): gets=131072 hit=0.148 avg=2.133 var=0.898 min=1.000 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+mixed DLFUCache(size=1024, msize=0, T=16.0): gets=131072 hit=0.262 avg=4.219 var=8.894 min=0.995 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
 expo DLFUCache(size=1024, msize=512, T=16.0): gets=131072 hit=0.466 avg=8.152 var=5.370 min=4.918 mhit=0.124 mavg=3.285 mvar=1.181 mmin=0.997
 jump DLFUCache(size=1024, msize=512, T=16.0): gets=131072 hit=0.185 avg=3.500 var=3.505 min=1.539 mhit=0.058 mavg=1.172 mvar=0.034 mmin=0.981
 wave DLFUCache(size=1024, msize=512, T=16.0): gets=131072 hit=0.158 avg=2.839 var=1.192 min=1.568 mhit=0.064 mavg=1.221 mvar=0.033 mmin=0.993
@@ -118,11 +118,11 @@ jump DLFUCache(size=1024, msize=2048, T=16.0): gets=131072 hit=0.237 avg=4.791 v
 wave DLFUCache(size=1024, msize=2048, T=16.0): gets=131072 hit=0.186 avg=3.612 var=0.981 min=2.507 mhit=0.244 mavg=1.593 mvar=0.199 mmin=0.981
 walk DLFUCache(size=1024, msize=2048, T=16.0): gets=131072 hit=0.188 avg=3.248 var=0.587 min=2.342 mhit=0.249 mavg=1.589 mvar=0.141 mmin=0.994
 mixed DLFUCache(size=1024, msize=2048, T=16.0): gets=131072 hit=0.317 avg=5.821 var=5.205 min=3.397 mhit=0.270 mavg=1.838 mvar=0.568 mmin=0.942
-expo DLFUCache(size=1024, msize=0, T=inf): gets=131072 hit=0.335 avg=43.852 var=697.218 min=2.000 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-jump DLFUCache(size=1024, msize=0, T=inf): gets=131072 hit=0.046 avg=6.868 var=13.280 min=1.000 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-wave DLFUCache(size=1024, msize=0, T=inf): gets=131072 hit=0.017 avg=3.223 var=3.609 min=1.000 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-walk DLFUCache(size=1024, msize=0, T=inf): gets=131072 hit=0.062 avg=8.905 var=9.953 min=2.000 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
-mixed DLFUCache(size=1024, msize=0, T=inf): gets=131072 hit=0.210 avg=27.846 var=617.601 min=2.000 mhit=0.000 mavg=  nan mvar=  nan mmin=0.000
+expo DLFUCache(size=1024, msize=0, T=inf): gets=131072 hit=0.335 avg=43.852 var=697.218 min=2.000 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+jump DLFUCache(size=1024, msize=0, T=inf): gets=131072 hit=0.046 avg=6.868 var=13.280 min=1.000 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+wave DLFUCache(size=1024, msize=0, T=inf): gets=131072 hit=0.017 avg=3.223 var=3.609 min=1.000 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+walk DLFUCache(size=1024, msize=0, T=inf): gets=131072 hit=0.062 avg=8.905 var=9.953 min=2.000 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
+mixed DLFUCache(size=1024, msize=0, T=inf): gets=131072 hit=0.210 avg=27.846 var=617.601 min=2.000 mhit=0.000 mavg=  nan mvar=  nan mmin=  nan
 expo DLFUCache(size=1024, msize=512, T=inf): gets=131072 hit=0.420 avg=55.927 var=380.804 min=26.000 mhit=0.058 mavg=13.516 mvar=47.386 mmin=2.000
 jump DLFUCache(size=1024, msize=512, T=inf): gets=131072 hit=0.051 avg=8.365 var=9.152 min=4.000 mhit=0.013 mavg=2.758 mvar=0.894 mmin=1.000
 wave DLFUCache(size=1024, msize=512, T=inf): gets=131072 hit=0.022 avg=4.376 var=2.715 min=2.000 mhit=0.007 mavg=1.504 mvar=0.250 mmin=1.000

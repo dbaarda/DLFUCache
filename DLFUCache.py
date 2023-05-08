@@ -248,7 +248,7 @@ class DLFUCache(abc.MutableMapping):
       self.mcount_sum += p
       self.mcount_sum2 += p*p
     elif self.mqueue and self._mqueue_min <= p:
-      # If's higher than the mqueue min entry, replace it.
+      # It is higher than the mqueue min entry, replace it.
       mink, minp = self.mqueue.swapitem(k, p)
       self.mcount_sum += p - minp
       self.mcount_sum2 += p*p - minp*minp
@@ -263,7 +263,7 @@ class DLFUCache(abc.MutableMapping):
       self.count_sum += p
       self.count_sum2 += p*p
     elif self._cqueue_min <= p:
-      # Its higher than the cqueue min entry, cascade it to the mqueue.
+      # It is higher than the cqueue min entry, cascade to the mqueue.
       mink, minp = self.cqueue.swapitem(k, p)
       self._setmqueue(mink, minp)
       self.count_sum += p - minp
@@ -318,7 +318,7 @@ class DLFUCache(abc.MutableMapping):
       self._incmqueue(key)
     else:
       # Cache miss, add it to the mqueue (if good enough).
-      self._setmqueue(key, 0.5 * self._tqueue_min + self.C)
+      self._setmqueue(key, self.C)
     self._decayall()
     return self.data[key]
 
@@ -329,7 +329,7 @@ class DLFUCache(abc.MutableMapping):
       self._movmqueue(key)
     elif key not in self.cqueue:
       # Add a new entry to the cqueue (if good enough).
-      self._setcqueue(key, 0.5 * self._tqueue_min + self.C)
+      self._setcqueue(key, self.C)
     if key in self.cqueue:
       # It is in the cqueue, cache the value.
       self.data[key] = value
@@ -351,8 +351,7 @@ class DLFUCache(abc.MutableMapping):
       return self.cqueue[key] / self.C
     if key in self.mqueue:
       return self.mqueue[key] / self.C
-    # Assume unknown keys have half the minimum count.
-    return 0.5 * self._tqueue_min / self.C
+    return 0.0
 
   def __repr__(self):
     return "%s(size=%s, msize=%s, T=%3.1f)" % (

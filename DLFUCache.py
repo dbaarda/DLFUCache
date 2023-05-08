@@ -114,7 +114,9 @@ class DLFUCache(abc.MutableMapping):
   @property
   def _mqueue_min(self):
     """The mqueue minimum value."""
-    return self.mqueue.peekitem()[1] if self.msize == len(self.mqueue) else 0.0
+    if self.msize:
+      return self.mqueue.peekitem()[1] if self.msize == len(self.mqueue) else 0.0
+    return nan
 
   @property
   def _tqueue_min(self):
@@ -149,12 +151,12 @@ class DLFUCache(abc.MutableMapping):
   @property
   def mcount_min(self):
     """The extra metadata minimum access count."""
-    return self._mqueue_min / self.C if self.msize else nan
+    return self._mqueue_min / self.C
 
   @property
   def tcount_min(self):
     """The extra metadata minimum access count."""
-    return self.mcount_min if self.msize else self.count_min
+    return self._tqueue_min / self.C
 
   @property
   def count_avg(self):
@@ -164,9 +166,7 @@ class DLFUCache(abc.MutableMapping):
   @property
   def mcount_avg(self):
     """The extra metadata access count average."""
-    if 0 < self.msize:
-      return self.mcount_sum / (self.C * self.msize)
-    return nan
+    return self.mcount_sum / (self.C * self.msize) if self.msize else nan
 
   @property
   def tcount_avg(self):
@@ -181,9 +181,7 @@ class DLFUCache(abc.MutableMapping):
   @property
   def mcount_var(self):
     """The extra metadata access count variance."""
-    if 0 < self.msize:
-      return self.mcount_sum2 / (self.C**2 * self.msize) - self.mcount_avg**2
-    return nan
+    return self.mcount_sum2 / (self.C**2 * self.msize) - self.mcount_avg**2 if self.msize else nan
 
   @property
   def tcount_var(self):
@@ -208,23 +206,17 @@ class DLFUCache(abc.MutableMapping):
   @property
   def hit_rate(self):
     """The cache contents hit rate."""
-    if 0 < self.get_count:
-      return self.hit_count / self.get_count
-    return nan
+    return self.hit_count / self.get_count if self.get_count else nan
 
   @property
   def mhit_rate(self):
     """The extra metadata hit rate."""
-    if 0 < self.get_count:
-      return self.mhit_count / self.get_count
-    return nan
+    return self.mhit_count / self.get_count if self.get_count else nan
 
   @property
   def thit_rate(self):
     """The total cache+metadata hit rate."""
-    if 0 < self.get_count:
-      return self.thit_count / self.get_count
-    return nan
+    return self.thit_count / self.get_count if self.get_count else nan
 
   def _inccqueue(self, key):
     """Increment the access count of a cqueue entry."""
@@ -237,7 +229,7 @@ class DLFUCache(abc.MutableMapping):
 
   def _incmqueue(self, key):
     """Increment the access count of a mqueue entry."""
-    # For LRU pre-decay increment to zero, otherwise increment by C.
+    # If LRU pre-decay increment to zero, otherwise increment by C.
     p = self.C if self.T else 0.0
     old_count = self.mqueue[key]
     self.mqueue[key] += p
@@ -253,7 +245,7 @@ class DLFUCache(abc.MutableMapping):
       self.mqueue[k] = p
       self.mcount_sum += p
       self.mcount_sum2 += p*p
-    elif self.mqueue and self._mqueue_min <= p:
+    elif self._mqueue_min <= p:
       # It is higher than the mqueue min entry, replace it.
       mink, minp = self.mqueue.swapitem(k, p)
       self.mcount_sum += p - minp
@@ -264,7 +256,7 @@ class DLFUCache(abc.MutableMapping):
     # If LRU pre-decay the value to zero.
     p = p if self.T else 0.0
     if len(self.cqueue) < self.size:
-      # Theres space, just add a new entry.
+      # There is space, just add a new entry.
       self.cqueue[k] = p
       self.count_sum += p
       self.count_sum2 += p*p
@@ -288,7 +280,7 @@ class DLFUCache(abc.MutableMapping):
   def _movmqueue(self, k):
     """Move an mqueue entry to the cqueue if it is good enough."""
     if self._cqueue_min <= self.mqueue[k]:
-      # It's higher than the cqueue min entry, cascade it up to the cqueue.
+      # It is higher than the cqueue min entry, cascade it up to the cqueue.
       k, p = self.mqueue.popitem(k)
       self.mcount_sum -= p
       self.mcount_sum2 -= p*p
@@ -319,7 +311,7 @@ class DLFUCache(abc.MutableMapping):
       self.hit_count += 1
       self._inccqueue(key)
     elif key in self.mqueue:
-      # Metadata hit increment count in mqueue.
+      # Metadata hit, increment count in mqueue.
       self.mhit_count += 1
       self._incmqueue(key)
     else:
